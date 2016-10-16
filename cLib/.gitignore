@@ -1,3 +1,25 @@
+
+# Falcon cLib
+.cproject
+.project
+bin/
+config.guess
+config.h.in~
+config.log
+config.status
+config.sub
+lib/
+libtool
+ltmain.sh
+share/
+src/lib/.deps/
+src/lib/.libs/
+src/lib/Makefile
+src/lib/*.lo
+src/lib/*.o
+src/main/.deps/
+src/main/*.o
+
 # http://www.gnu.org/software/automake
 
 Makefile.in

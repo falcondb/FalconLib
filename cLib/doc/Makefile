@@ -148,7 +148,7 @@ AUTOMAKE = ${SHELL} /home/synced/FalconLib/cLib/missing automake-1.13
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -DFALCONPRINT
+CFLAGS = -g -O2
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
@@ -163,7 +163,7 @@ ECHO_T =
 EGREP = /usr/bin/grep -E
 EXEEXT = 
 FGREP = /usr/bin/grep -F
-Flib_cflags = 
+Flib_cflags =  -DPRINTCOLOR -g3
 Flib_iflags = -I/home/synced/FalconLib/cLib/src/include
 Flib_lflags = 
 GREP = /usr/bin/grep

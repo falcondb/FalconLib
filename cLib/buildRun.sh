@@ -1,12 +1,12 @@
 set -x -e
 #### Generate configure.ac ####
-autoreconf -i
+#autoreconf -i
 
 ### Configure and make ###
 #### Another way to set the target path is setting DESTDIR before running make install ####
-./configure --prefix=$PWD --enable-falconprint
+./configure --prefix=$PWD --enable-debugmode --enable-falconprint
 make
 make install
 
 ### Run a test ###
-### bin/helloWorld
+bin/falconclib

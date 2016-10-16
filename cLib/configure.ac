@@ -12,9 +12,6 @@ Flib_hdr="${Flib_src}/include"
 Flib_lib="${Flib_src}/lib"
 Flib_test="${Flib_src}/main"
 
-Flib_cflags=""
-Flib_iflags=""
-Flib_lflags=""
 
 dnl ####################################
 dnl AC_CONFIG_SRCDIR([src/helloWorld.c])
@@ -36,7 +33,7 @@ AC_ARG_ENABLE(falconprint,
 
 if test "x$FalconPrint" = "xyes"; then
 	AC_MSG_NOTICE([enables Falcon print features])
-  	: ${CFLAGS=-DFALCONPRINT}
+  	Flib_cflags="$Flib_cflags -DPRINTCOLOR"
 fi
 
 
@@ -56,9 +53,9 @@ AC_ARG_ENABLE(debugmode,
 
 if test "x$debugmode" = "xyes"; then
 	AC_MSG_NOTICE([enables debugmode])
-  	: ${Flib_cflags=-g3}
+  	Flib_cflags="$Flib_cflags -g3"
 else
-	: ${Flib_cflags=-o3}
+  	Flib_cflags="$Flib_cflags -o3"
 fi
 
 
