@@ -10,4 +10,6 @@ https://github.com/solatis/libpaxos-cpp
 ## Vector clock || Lamport timestamps || Version vector
 ???, easy, right?
 
+## IO framework
+https://github.com/libevent/libevent
 
