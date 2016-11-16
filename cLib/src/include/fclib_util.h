@@ -8,6 +8,7 @@
 #ifndef SRC_INCLUDE_FCLIB_UTIL_H_
 #define SRC_INCLUDE_FCLIB_UTIL_H_
 
+
 #define FCLIBDEBUGPAUSEPERIOD 30
 
 #define likely(x)       __builtin_expect(!!(x),1)
