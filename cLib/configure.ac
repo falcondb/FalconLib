@@ -3,6 +3,7 @@ AC_PREREQ([2.69])
 
 AC_INIT([Falcon-CLib], [0.0.1], [abc@gmail.com])
 AM_INIT_AUTOMAKE(Falcon-CLib, 0.0.1)
+AC_CONFIG_HEADER([src/include/config.h])
 AC_OUTPUT(Makefile src/main/Makefile src/lib/Makefile doc/Makefile scripts/Makefile)
 
 

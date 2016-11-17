@@ -80,8 +80,8 @@ host_triplet = x86_64-unknown-linux-gnu
 subdir = .
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
-	$(srcdir)/config.h.in config.guess config.sub depcomp \
-	install-sh missing ltmain.sh
+	$(top_srcdir)/src/include/config.h.in $(srcdir)/config.h.in \
+	config.guess config.sub depcomp install-sh missing ltmain.sh
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -89,7 +89,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = config.h
+CONFIG_HEADER = $(top_builddir)/src/include/config.h config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_$(V))
@@ -216,7 +216,7 @@ ECHO_T =
 EGREP = /usr/bin/grep -E
 EXEEXT = 
 FGREP = /usr/bin/grep -F
-Flib_cflags =  -DPRINTCOLOR -g3
+Flib_cflags =  -g3
 Flib_iflags = -I/home/synced/FalconLib/cLib/src/include
 Flib_lflags = 
 GREP = /usr/bin/grep
@@ -297,7 +297,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /home/synced/FalconLib/cLib
+prefix = /usr/local
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
@@ -349,20 +349,28 @@ $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
 
-config.h: stamp-h1
-	@if test ! -f $@; then rm -f stamp-h1; else :; fi
-	@if test ! -f $@; then $(MAKE) $(AM_MAKEFLAGS) stamp-h1; else :; fi
+src/include/config.h: src/include/stamp-h1
+	@if test ! -f $@; then rm -f src/include/stamp-h1; else :; fi
+	@if test ! -f $@; then $(MAKE) $(AM_MAKEFLAGS) src/include/stamp-h1; else :; fi
 
-stamp-h1: $(srcdir)/config.h.in $(top_builddir)/config.status
-	@rm -f stamp-h1
-	cd $(top_builddir) && $(SHELL) ./config.status config.h
-$(srcdir)/config.h.in:  $(am__configure_deps) 
+src/include/stamp-h1: $(top_srcdir)/src/include/config.h.in $(top_builddir)/config.status
+	@rm -f src/include/stamp-h1
+	cd $(top_builddir) && $(SHELL) ./config.status src/include/config.h
+$(top_srcdir)/src/include/config.h.in:  $(am__configure_deps) 
 	($(am__cd) $(top_srcdir) && $(AUTOHEADER))
-	rm -f stamp-h1
+	rm -f src/include/stamp-h1
 	touch $@
 
+config.h: stamp-h2
+	@if test ! -f $@; then rm -f stamp-h2; else :; fi
+	@if test ! -f $@; then $(MAKE) $(AM_MAKEFLAGS) stamp-h2; else :; fi
+
+stamp-h2: $(srcdir)/config.h.in $(top_builddir)/config.status
+	@rm -f stamp-h2
+	cd $(top_builddir) && $(SHELL) ./config.status config.h
+
 distclean-hdr:
-	-rm -f config.h stamp-h1
+	-rm -f src/include/config.h src/include/stamp-h1 config.h stamp-h2
 
 mostlyclean-libtool:
 	-rm -f *.lo

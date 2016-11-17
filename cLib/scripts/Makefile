@@ -85,7 +85,8 @@ am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/config.h
+CONFIG_HEADER = $(top_builddir)/src/include/config.h \
+	$(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
@@ -163,7 +164,7 @@ ECHO_T =
 EGREP = /usr/bin/grep -E
 EXEEXT = 
 FGREP = /usr/bin/grep -F
-Flib_cflags =  -DPRINTCOLOR -g3
+Flib_cflags =  -g3
 Flib_iflags = -I/home/synced/FalconLib/cLib/src/include
 Flib_lflags = 
 GREP = /usr/bin/grep
@@ -244,7 +245,7 @@ mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /home/synced/FalconLib/cLib
+prefix = /usr/local
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
