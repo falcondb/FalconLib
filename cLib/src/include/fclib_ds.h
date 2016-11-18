@@ -8,12 +8,16 @@
 #ifndef SRC_INCLUDE_FCLIB_DS_H_
 #define SRC_INCLUDE_FCLIB_DS_H_
 
-
 #include <sys/queue.h>
+/* Need to check GNU C LIB in configure phase. */
+#define __USE_GNU
+#define _GNU_SOURCE
+#include <search.h>
 
+/**** double linked list gnu clib ****/
 struct fc_list_i_t {
-	int val;
-	LIST_ENTRY(fc_list_i_t) entries;
+	int val;LIST_ENTRY(fc_list_i_t)
+	entries;
 };
 
 typedef LIST_HEAD(fc_l_i_h, fc_list_i_t) fc_list_i_h;
@@ -22,7 +26,6 @@ typedef LIST_HEAD(fc_l_i_h, fc_list_i_t) fc_list_i_h;
 		node = malloc(sizeof(struct fc_list_i_t)); \
 		if (node) node->val = v; \
 		}while (0)
-
 
 #define FC_LIST_PRINT(head, type, field, fmt) do { \
 	struct type * node; 	\
@@ -38,5 +41,37 @@ typedef LIST_HEAD(fc_l_i_h, fc_list_i_t) fc_list_i_h;
 		free(node);	\
 	}	\
 	} while (0)
+
+/**** Hash table gnu clib ****/
+/* create a named table */
+#define FC_HT_CRE(ptr, els) do {	\
+	ptr = calloc(1,sizeof(struct hsearch_data));	\
+	hcreate_r((int) (els * 1.25), ht);	\
+} while(0)
+
+/* add an element e to table ht, result res */
+#define FC_HT_ADD(e, res, ht)	hsearch_r(e, ENTER, &res, ht)
+/* find an element e in table ht, found element res */
+#define FC_HT_FIND(e, res, ht)	hsearch_r(e, FIND, &res, ht)
+/* free the space of table ht */
+#define FC_HT_FREE(ht)		hdestroy_r(ht)
+/* get hashing value from pointer */
+#define HT_HT_H(ptr) (*(int*)ptr)
+/* get hashed element's key from pointer */
+#define HT_HT_K(ptr) ( ((ENTRY *) (ptr + sizeof(long)))->key )
+/* get hashed element's value from pointer */
+#define HT_HT_V(ptr) ( ((ENTRY *) (ptr + sizeof(long)))->data )
+/* get next element's address from pointer */
+#define HT_HT_NEXT(ptr) (ptr + sizeof(long) + sizeof(struct entry))
+/* print all the elements in hash table */
+#define FC_HT_PRINT(ht) do { \
+		void *ptr = ht->table;	\
+		for (i =  0; i < ht->size; ++i){ \
+			if(HT_HT_H(ptr) != 0){ 	\
+			printf("Hash:%d\tkey: %s\t\tValue: %d\n", HT_HT_H(ptr), HT_HT_K(ptr), *((int *)(HT_HT_V(ptr)))); \
+			}	\
+			ptr = HT_HT_NEXT(ptr);	\
+		}	\
+		} while (0)
 
 #endif /* SRC_INCLUDE_FCLIB_DS_H_ */

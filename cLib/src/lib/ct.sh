@@ -1,4 +1,5 @@
 [ $# != 1 ] && exit -1
 
-gcc $1 -o test -ggdb3 -I ../include/
+reset
+gcc $1 -o test -ggdb3 -I ../include/ -DDEBUG
 ./test
