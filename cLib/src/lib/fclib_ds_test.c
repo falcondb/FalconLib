@@ -9,7 +9,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fclib_ds.h>
-#include <common.h>
+
+#include "../include/fclib_common.h"
 
 #define DATASIZE 32
 #define MAXKEYLEN 10

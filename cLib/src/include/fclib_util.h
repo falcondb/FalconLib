@@ -11,9 +11,9 @@
 
 #define FCLIBDEBUGPAUSEPERIOD 30
 
-#define likely(x)       __builtin_expect(!!(x),1)
-#define unlikely(x)     __builtin_expect(!!(x),0)
-
 #define FCLIBENABLEDEBUGGER if (getenv("FCLIBDEBUGGER")) sleep (FCLIBDEBUGPAUSEPERIOD);
+
+extern int fclib_set_alarm(struct sigaction *sa, struct itimerval * timer,
+		unsigned int sleep_time,  void (*handler)(int) );
 
 #endif /* SRC_INCLUDE_FCLIB_UTIL_H_ */
