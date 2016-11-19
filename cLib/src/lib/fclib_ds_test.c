@@ -85,7 +85,7 @@ static int CC_ATT(unused) test_hashtable() {
 		assert(ep);
 	}
 
-	FC_HT_PRINT(ht);
+	FC_HT_PRINT(ht, int, d);
 
 	/* search for random int in the hashtable */
 	for (i = 0; i < 10; i++) {

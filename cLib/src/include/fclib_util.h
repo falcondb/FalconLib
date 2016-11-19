@@ -9,6 +9,10 @@
 #define SRC_INCLUDE_FCLIB_UTIL_H_
 
 
+#define MIN(m,n) ((m) < (n) ? (m) : (n))
+
+#define MAX(m,n) ((m) > (n) ? (m) : (n))
+
 #define FCLIBDEBUGPAUSEPERIOD 30
 
 #define FCLIBENABLEDEBUGGER if (getenv("FCLIBDEBUGGER")) sleep (FCLIBDEBUGPAUSEPERIOD);

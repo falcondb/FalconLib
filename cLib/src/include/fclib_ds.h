@@ -69,7 +69,7 @@ typedef LIST_HEAD(fc_l_i_h, fc_list_i_t) fc_list_i_h;
 		unsigned int i;			\
 		for (i =  0; i < ht->size; ++i){ \
 			if(HT_HT_H(ptr) != 0){ 	\
-			printf("Index:%u\tHash:%li\tKey: %s\t\tValue: %"fmf"\n",i, HT_HT_H(ptr), HT_HT_K(ptr), *((v_type *)(HT_HT_V(ptr)))); \
+			printf("Index:%u\tHash:%li\tKey: %s\t\tValue: %"#v_fmf"\n", i, HT_HT_H(ptr), HT_HT_K(ptr), *((v_type *)(HT_HT_V(ptr)))); \
 			}	\
 			ptr = HT_HT_NEXT(ptr);	\
 		}	\
