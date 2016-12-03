@@ -107,6 +107,9 @@ static int CC_ATT(unused) test_hashtable() {
 }
 
 int main(int argc, char ** argv) {
+
+	set_debug_traps();
+
 	test_hashtable();
 	//test_list();
 

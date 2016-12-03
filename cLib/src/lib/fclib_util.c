@@ -36,3 +36,33 @@ extern int fclib_set_alarm(struct sigaction *sa, struct itimerval * timer,
 
 	return rval;
 }
+
+extern int readFD(int fd, void * buf, unsigned int size){
+	assert(fd > 0);
+	assert(buf);
+
+	int pos = 0, rval = 0;
+	for(; rval != -1 && pos < size; rval = read(fd, buf, size - pos)){
+		if(rval >= 0){
+			pos += rval;
+		}else if( (errno == EAGAIN) || (errno == EWOULDBLOCK)){
+			;// if non-blocking, just ignore
+		}
+	}
+	return rval == -1 ? rval : size - pos;
+}
+
+extern int writeFD(int fd, void * buf, unsigned int size){
+	assert(fd > 0);
+	assert(buf);
+
+	int pos = 0, rval = 0;
+	for(; rval != -1 && pos < size; rval = write(fd, buf, size - pos)){
+		if(rval >= 0){
+		pos += rval;
+	}else if( (errno == EAGAIN) || (errno == EWOULDBLOCK)){
+		;// if non-blocking, just ignore
+	}
+}
+	return rval == -1 ? rval : size - pos;
+}

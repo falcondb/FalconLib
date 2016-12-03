@@ -1,2 +1,2 @@
 AUTOMAKE_OPTIONS = foreign
-SUBDIRS = src/lib src/main doc scripts
+SUBDIRS = src/lib src/main src/test doc scripts
