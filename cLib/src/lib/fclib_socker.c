@@ -5,8 +5,8 @@
  *      Author: mayi
  */
 
-#include<fclib_socket.h>
-#include<fclib_common.h>
+#include <fclib_socket.h>
+#include <fclib_common.h>
 
 /* the code here is only for Linux OS */
 //#ifdef __linux__
@@ -197,7 +197,7 @@ int sendPackage(struct sock_meta* target_socket_meta, struct socket_package * pa
 	assert(package->size >=0 );
 
 	packet_size = htonl(package->size);
-	//TODO: check the bytes of sendto
+
 	if(package->body){
 		if(target_socket_meta->type == SOCK_STREAM){
 			rval = fclib_sendto(target_socket_meta->socketfd, &packet_size, sizeof(packet_size), flags, NULL, 0);

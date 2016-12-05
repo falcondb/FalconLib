@@ -15,6 +15,40 @@
 #define DATASIZE 32
 #define MAXKEYLEN 10
 
+static int CC_ATT(unused) test_ptrlist() {
+	struct fc_list_ptr_t * node, *tmp_node;
+	int c = 0;
+	fc_list_ptr_h head;
+
+	char data[5] = {'a', 'b', 'c', 'd', 'e'};
+	LIST_INIT(&head);
+
+	FC_LIST_I_CRE_NODE(node, data);
+	LIST_INSERT_HEAD(&head, node, entries);
+
+	tmp_node = LIST_FIRST(&head);
+	for (c = 1; c < 5; ++c) {
+		FC_LIST_I_CRE_NODE(node, &data[c]);
+		if (!node)
+			goto err;
+		LIST_INSERT_AFTER(tmp_node, node, entries);
+		tmp_node = LIST_NEXT(tmp_node, entries);
+		//LIST_INSERT_HEAD(&head, node, entries);
+	}
+
+	// get the second node, assume the second exists, code for fan only
+	//node = LIST_NEXT(LIST_NEXT(LIST_FIRST(&head), entries), entries);
+	LIST_FOREACH(node, &head, entries)
+		fprintf(stdout, "val: %c\n",*(char *) node->val);
+
+	FC_LIST_FREE(&head, fc_list_ptr_t, entries);
+
+	fprintf(stdout, "Byte!\n");
+
+	return EXIT_SUCCESS;
+	err: return EXIT_FAILURE;
+}
+
 
 static int CC_ATT(unused) test_list() {
 	struct fc_list_i_t * node, *new_node;
@@ -108,10 +142,10 @@ static int CC_ATT(unused) test_hashtable() {
 
 int main(int argc, char ** argv) {
 
-	set_debug_traps();
+	//set_debug_traps();
 
-	test_hashtable();
-	//test_list();
+	//test_hashtable();
+	test_ptrlist();
 
 	return EXIT_SUCCESS;
 	err: return EXIT_FAILURE;

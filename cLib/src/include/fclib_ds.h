@@ -15,9 +15,24 @@
 #include <search.h>
 
 /**** double linked list gnu clib ****/
+
+struct fc_list_ptr_t {
+	void* val;
+	LIST_ENTRY(fc_list_ptr_t) entries;
+};
+
+/* double linked list with void pointers */
+typedef LIST_HEAD(fc_l_ptr_h, fc_list_ptr_t) fc_list_ptr_h;
+
+#define FC_LIST_PTR_CRE_NODE(node, v) do {\
+		node = malloc(sizeof(struct fc_list_ptr_t)); \
+		if (node) node->val = v; \
+		}while (0)
+
+/* double linked list with integers */
 struct fc_list_i_t {
-	int val;LIST_ENTRY(fc_list_i_t)
-	entries;
+	int val;
+	LIST_ENTRY(fc_list_i_t) entries;
 };
 
 typedef LIST_HEAD(fc_l_i_h, fc_list_i_t) fc_list_i_h;

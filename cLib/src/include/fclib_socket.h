@@ -13,12 +13,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#define ERROR_CREAT_SOCKET_FAILURE 1;
-#define ERROR_BIND_SOCKET_FAILURE 2;
-#define ERROR_CONNECT_SOCKET_FAILURE 3;
-#define ERROR_CREAT_SOCKET_PORT 101;
-#define ERROR_CREAT_SOCKET_DOMAIN 102;
-#define ERROR_SOCKET_TYPE 103;
+#include <fclib_errorno.h>
 
 #ifndef MAX_SOCKET_PENDING_QUEUE
 #define MAX_SOCKET_PENDING_QUEUE (64);
