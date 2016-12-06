@@ -1,0 +1,8 @@
+* Linked list library for generic data
+* Queue library and test
+
+* socket IPV6 imlementation and test
+* socket UDF send/receive
+* more epoll test
+* integrate socket and epoll, and test
+

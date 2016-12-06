@@ -26,7 +26,15 @@ struct fclib_epoll_meta{
 	struct epoll_event * events;
 };
 
+struct fclib_epoll_meta * create_epoll( int max_event, int time_out );
 
+int free_epoll(struct fclib_epoll_meta * meta );
+
+int add_epoll_event(struct fclib_epoll_meta * epoll, int listen_fd, int flags);
+
+int remove_epoll_event(struct fclib_epoll_meta * epoll, int listen_fd);
+
+int wait_epoll(struct fclib_epoll_meta * epoll, int (*wait_handler)(int fd), int (*wait_error_handler)(int fd));
 
 //#endif
 

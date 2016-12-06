@@ -13,10 +13,10 @@
 struct fclib_epoll_meta * create_epoll( int max_event, int time_out ){
 	int rval = 0;
 	struct fclib_epoll_meta * meta;
-	if(unlikely(meta = malloc(sizeof(struct fclib_epoll_meta)) == NULL))
+	if(unlikely((meta = malloc(sizeof(struct fclib_epoll_meta))) == NULL))
 		goto error;
 
-	if(unlikely(rval = epoll_create(0)) == -1)
+	if(unlikely((rval = epoll_create(1)) == -1)) //Since Linux 2.6.8, the size argument is ignored
 		goto error;
 
 	meta->epollfd = rval;
@@ -64,11 +64,11 @@ int add_epoll_event(struct fclib_epoll_meta * epoll, int listen_fd, int flags){
 	ev = malloc(sizeof(struct epoll_event));
 	assert(ev);
 
-	ev->events = flags < 0 ? EPOLLIN | EPOLLOUT | EPOLLPRI | EPOLLERR | EPOLLHUP :
-			flags == 0 ? EPOLLIN | EPOLLOUT : flags;
+	ev->events = flags < 0 ? EPOLLIN | EPOLLPRI | EPOLLERR | EPOLLHUP :
+			flags == 0 ? EPOLLIN : flags;
 	ev->data.fd = listen_fd;
 
-	if(unlikely(rval = epoll_ctl(epoll->epollfd, EPOLL_CTL_ADD, listen_fd, ev)) == -1 )
+	if(unlikely((rval = epoll_ctl(epoll->epollfd, EPOLL_CTL_ADD, listen_fd, ev)) == -1))
 		goto error;
 
 	FC_LIST_PTR_CRE_NODE(list_node, (void *)ev);
@@ -104,14 +104,26 @@ error:
 	return rval;
 }
 
-int wait_epoll(struct fclib_epoll_meta * epoll){
+int wait_epoll(struct fclib_epoll_meta * epoll, int (*wait_handler)(int fd), int (*wait_error_handler)(int fd)){
 	int rval = 0;
+	int i, num_events;
 
-	if(unlikely((rval = epoll_wait(epoll->epollfd, epoll->events ,epoll->wait_max_event, epoll->wait_time_out)) == -1))
+	assert(epoll);
+
+	if(unlikely((num_events = epoll_wait(epoll->epollfd, epoll->events ,epoll->wait_max_event, epoll->wait_time_out)) == -1)){
+		rval = num_events;
 		goto error;
+	}
+
+	// call the handlers for the events
+	for (i = 0; i < num_events; i++) {
+		if(wait_handler && (epoll->events[i].events & ( EPOLLIN | EPOLLPRI )))
+			// input event
+			rval = (*wait_handler)(epoll->events[i].data.fd);
+		else if(wait_error_handler && (epoll->events[i].events & (EPOLLHUP | EPOLLERR )))
+			rval = (*wait_error_handler)(epoll->events[i].data.fd);
+	}
 error:
 	return rval;
 }
-epoll_wait(int epfd, struct epoll_event *events,
-                      int maxevents, int timeout);
 //#endif
