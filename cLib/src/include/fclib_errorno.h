@@ -24,4 +24,7 @@
 
 #endif
 
+/* signal handler */
+#define ERROR_HANDLER_EXIST 3001;
+
 #endif /* SRC_INCLUDE_FCLIB_ERRORNO_H_ */
