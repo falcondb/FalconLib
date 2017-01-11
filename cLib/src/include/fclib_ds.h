@@ -61,7 +61,7 @@ typedef LIST_HEAD(fc_l_i_h, fc_list_i_t) fc_list_i_h;
 /* create a named table */
 #define FC_HT_CRE(ptr, els) do {	\
 	ptr = calloc(1,sizeof(struct hsearch_data));	\
-	hcreate_r((int) (els * 1.25), ht);	\
+	hcreate_r((int) (els * 1.25), ptr);	\
 } while(0)
 
 /* add an element e to table ht, result res */
