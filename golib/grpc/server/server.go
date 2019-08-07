@@ -1,4 +1,4 @@
-package sc
+package main
 
 import (
     "context"
@@ -10,24 +10,25 @@ import (
 )
 
 type server struct {
-     who string
+     Who string
 }
 
 
-func (*server) UnaryEcho(ctx context.Context, req *pb.EchoRequest) (*pb.EchoResponse, error) {
-    return &pb.EchoResponse{Message: server.who + " is doing good!"}, nil
+func (s *server) UnaryEcho(ctx context.Context, req *pb.EchoRequest) (*pb.EchoResponse, error) {
+
+    return &pb.EchoResponse{Message: s.Who + " is doing good!"}, nil
 }
 
 // ServerStreamingEcho is server side streaming.
-func (*server) ServerStreamingEcho(ctx *pb.EchoRequest, st pb.Echo_ServerStreamingEchoServer) error {
+func (s *server) ServerStreamingEcho(ctx *pb.EchoRequest, st pb.Echo_ServerStreamingEchoServer) error {
     return nil
 }
 // ClientStreamingEcho is client side streaming.
-func (*server)  ClientStreamingEcho(st pb.Echo_ClientStreamingEchoServer) error {
+func (s *server)  ClientStreamingEcho(st pb.Echo_ClientStreamingEchoServer) error {
     return nil
 }
 // BidirectionalStreamingEcho is bidi streaming.
-func (*server) BidirectionalStreamingEcho(st pb.Echo_BidirectionalStreamingEchoServer) error {
+func (s *server) BidirectionalStreamingEcho(st pb.Echo_BidirectionalStreamingEchoServer) error {
     return nil
 }
 
@@ -38,7 +39,7 @@ func main() {
     }
 
     s := grpc.NewServer()
-    pb.RegisterEchoServer(s, &server{})
+    pb.RegisterEchoServer(s, &server{Who:"Falcon"})
     if err := s.Serve(lis); err != nil {
         log.Fatalf("failed to serve: %v", err)
     }
