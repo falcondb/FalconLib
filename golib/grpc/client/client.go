@@ -4,27 +4,12 @@ import (
     "context"
     pb "github.com/falcondb/FalconLib/golib/grpc/protob"
     "google.golang.org/grpc"
+    "io"
     "log"
     "time"
 )
 
 type client struct{}
-
-func (c *client) UnaryEcho(ctx context.Context, in *pb.EchoRequest, opts ...grpc.CallOption) (*pb.EchoResponse, error) {
-    return nil, nil
-}
-
-func (c *client) ServerStreamingEcho(ctx context.Context, in *pb.EchoRequest, opts ...grpc.CallOption) (pb.Echo_ServerStreamingEchoClient, error) {
-    return nil, nil
-}
-
-func (c *client) ClientStreamingEcho(ctx context.Context, opts ...grpc.CallOption) (pb.Echo_ClientStreamingEchoClient, error) {
-    return nil, nil
-}
-
-func (c *client) BidirectionalStreamingEcho(ctx context.Context, opts ...grpc.CallOption) (pb.Echo_BidirectionalStreamingEchoClient, error) {
-    return nil, nil
-}
 
 func main() {
     conn, err := grpc.Dial("localhost:11123", grpc.WithInsecure())
@@ -43,4 +28,17 @@ func main() {
         log.Fatalf("could not greet: %v", err)
     }
     log.Printf("Greeting: %s", r.Message)
+
+    stream, _ := c.ServerStreamingEcho(ctx, &pb.EchoRequest{Message: name})
+
+    for {
+        greetings, err := stream.Recv()
+        if err == io.EOF {
+            break
+        }
+        if err != nil {
+            log.Fatal(err)
+        }
+        log.Println(greetings)
+    }
 }
