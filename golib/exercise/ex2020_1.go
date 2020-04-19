@@ -410,11 +410,11 @@ func minPartition(nums []int) int {
 	}
 
 	min := 1<<31 - 1
-	ca := make([]int, 1<<len(nums))
+	ca := make([]int, 1<<uint16(len(nums)))
 	ca[0], ca[1] = 0, nums[0]
 	for i := 0; i < len(nums); i++ {
-		for j := 0; j < 1<<i; j++ {
-			ca[j+1<<i] = nums[i] + ca[j]
+		for j := 0; j < 1<<uint16(i); j++ {
+			ca[j+1<<uint16(i)] = nums[i] + ca[j]
 		}
 	}
 
