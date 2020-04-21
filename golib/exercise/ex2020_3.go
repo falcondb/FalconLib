@@ -235,7 +235,7 @@ func decodeString(inp []byte) []byte {
 func dsSubproblem(p []byte) ([]byte, int, int, int) {
   i,h,t := 0, -1, len(p)
   reps := 0
-  pre := []byte {}
+  pre := make([]byte, 0)
 
   for ; i< len(p) && p[i] >= 'a' && p[i] <= 'z'; i++ {
     pre = append(pre, p[i])
@@ -252,7 +252,7 @@ func dsSubproblem(p []byte) ([]byte, int, int, int) {
 }
 
 func generateReps(reps int, substr []byte) []byte {
-  res := []byte {}
+  res := make([]byte, 0)
   for ; reps >0; reps-- {res = append(res, substr...)}
   return res
 }
