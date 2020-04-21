@@ -43,3 +43,45 @@ func reverseMatch(a, b []int) bool {
   
   return true
 }
+
+func decodeString(inp []byte) []byte {
+
+  if inp == nil || len(inp) == 0 {
+    return []byte {}
+  }
+
+  pre, reps, h, t := dsSubproblem(inp)
+
+  if reps != 0 {
+    pre = append(pre, generateReps(reps, inp[h+1:t])...)
+    pre = append(pre, decodeString(inp[t+1:])...)
+  }
+
+  return pre
+}
+
+
+func dsSubproblem(p []byte) ([]byte, int, int, int) {
+  i,h,t := 0, -1, len(p)
+  reps := 0
+  pre := []byte {}
+
+  for ; i< len(p) && p[i] >= 'a' && p[i] <= 'z'; i++ {
+    pre = append(pre, p[i])
+  }
+
+  for ; i < len(p) && p[i] >= '0' && p[i] <= '9'; i++ {
+    reps = reps * 10 + int(p[i]) - int('0')
+  }
+
+  for h = i; h < len(p) && p[h] != '['; h++ { }
+  for t = len(p) - 1; t >=0 && p[t] != ']'; t-- { }
+
+  return pre, reps, h, t
+}
+
+func generateReps(reps int, substr []byte) []byte {
+  res := []byte {}
+  for ; reps >0; reps-- {res = append(res, substr...)}
+  return res
+}
