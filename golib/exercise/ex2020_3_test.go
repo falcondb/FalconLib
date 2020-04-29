@@ -34,16 +34,22 @@ func TestCountSubarrays(t *testing.T) {
 	testCountSubarrays([]int{10, 6, 9, 0, 5, 6}, []uint16{6, 1, 5, 1, 2, 3}, t)
 }
 
-func testCountSubarrays(a []int, exp []uint16, t  *testing.T){
+func testCountSubarrays(a []int, exp []uint16, t  *testing.T) {
 	res := countSubarrays(a)
 
+	if !assertSlicesEqual(res, exp) {
+		fmt.Printf("Res: %v\t Exp:%v\n", res, exp)
+		t.Errorf("Test name is %s, ", t.Name())
+	}
+}
+
+func assertSlicesEqual(res, exp []uint16) bool {
 	for i, v := range res {
 		if v != exp[i] {
-			fmt.Printf("Res: %v\t Exp:%v\n", res, exp)
-			t.Errorf("Test name is %s, ", t.Name())
-			return
+			return false
 		}
 	}
+	return true
 }
 
 func TestGetMilestoneDays (t *testing.T) {
@@ -142,5 +148,94 @@ func testNrDiffTriangles(a tas, exp uint, t *testing.T) {
 	if res != exp {
 		fmt.Printf("Res: %v\t Exp:%v\n", res, exp)
 		t.Errorf("Test name is %s, ", t.Name())
+	}
+}
+
+func TestNumberOfWays (t *testing.T) {
+	TestnumberOfWays([]int{1, 5, 3, 3, 3}, 6, 4, t)
+	TestnumberOfWays([]int{1, 2, 3, 4, 3}, 6, 2, t)
+}
+
+func TestnumberOfWays (a []int, k int,  exp uint, t *testing.T) {
+	res := numberOfWays(a, k)
+
+	if res != exp {
+		fmt.Printf("Res: %v\t Exp:%v\n", res, exp)
+		t.Errorf("Test name is %s, ", t.Name())
+	}
+}
+
+
+
+func TestBstSearchRange(t *testing.T){
+	// case 1
+	r := bstNode{5, nil, nil}
+	testBstSearchRange(&r, 6,10, []uint16{}, t)
+
+	// case 2
+	r = bstNode{20, &bstNode{8, &bstNode{4, nil, nil}, &bstNode{12, nil, nil}}, &bstNode{22, nil, nil}}
+	testBstSearchRange(&r, 10, 22, []uint16{12, 20, 22}, t)
+}
+
+func testBstSearchRange(root *bstNode, min, max uint16, exp []uint16, t *testing.T){
+	res := bstSearchRange(root, min, max)
+
+	if !assertSlicesEqual(res, exp) {
+		fmt.Printf("Res: %v\t Exp:%v\n", res, exp)
+		t.Errorf("Test name is %s, ", t.Name())
+	}
+}
+
+func TestAllPossibleSubsets(t *testing.T) {
+
+	res := allPossibleSubsets([]uint16{1, 2, 3})
+
+	if res == nil || len(res) == 0 {
+		t.Errorf("Test name is %s, ", t.Name())
+	}
+
+	fmt.Printf("Res: %v\t\n", res)
+}
+
+func TestTopoSorting(t *testing.T) {
+	n0, n1, n2, n3, n4, n5, n6, n7 :=  graphNode{0, nil}, graphNode{1, nil}, graphNode{2, nil},
+	graphNode{3, nil}, graphNode{4, nil}, graphNode{5, nil}, graphNode{6, nil}, graphNode{7, nil}
+	n0.Links = []*graphNode{&n1, &n2, &n3}
+	n1.Links = []*graphNode{&n4, &n6}
+	n2.Links = []*graphNode{&n4, &n5, &n7}
+	n3.Links = []*graphNode{&n4, &n5, &n6, &n7}
+	n4.Links = []*graphNode{&n6, &n7}
+	n5.Links = []*graphNode{&n7}
+	g := graph{[]*graphNode{&n0, &n1, &n2, &n3, &n4, &n5, &n6, &n7}}
+
+	_, res := g.topoSorting()
+
+	for _, n := range res {
+		fmt.Printf("%v, ", n.V)
+	}
+}
+
+
+
+func TestPosNegNumss(t *testing.T) {
+	testPosNegNumss([]int{-1, -2, -3, 4, 5, 6}, t)
+	testPosNegNumss([]int{-1, 2, -3, -4, 5, 6}, t)
+	testPosNegNumss([]int{-1, 2, 3, -4, 5, -6}, t)
+	testPosNegNumss([]int{1, 2, 3, -4, -5, -6}, t)
+	testPosNegNumss([]int{1, 2, -3, 4, -5, -6}, t)
+}
+
+func testPosNegNumss(a []int, t *testing.T) {
+	posNegNums(a)
+
+	expSign := a[0] > 0
+	for _, v := range a {
+		if expSign && v < 0 || !expSign && v > 0 {
+			fmt.Printf("Res: %v\t\n", a)
+			t.Errorf("Test name is %s, ", t.Name())
+			return
+		} else {
+			expSign = !expSign
+		}
 	}
 }
