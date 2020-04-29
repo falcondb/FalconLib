@@ -256,3 +256,166 @@ func generateReps(reps int, substr []byte) []byte {
   for ; reps >0; reps-- {res = append(res, substr...)}
   return res
 }
+
+
+func numberOfWays(a []int, k int) uint {
+
+	wc := make(map[int]uint)
+	var ct uint = 0
+
+	for _, c := range a {
+		wc[c]++
+	}
+
+
+	for _, c := range a {
+		if wc[c] != 0 {
+			switch {
+			case k - c == c:
+				ct += wc[c] * (wc[c] - 1 ) >> 1
+				wc[c] = 0
+			default:
+				ct += wc[c] * wc[k-c]
+				wc[c], wc[k-c] = 0, 0
+			}
+		}
+	}
+
+	return ct
+}
+
+type bstNode struct {
+	v uint16
+	left, right *bstNode
+}
+
+func bstSearchRange(root *bstNode, min, max uint16) []uint16 {
+	if root == nil {
+		return nil
+	}
+
+	res := make([]uint16, 0)
+
+	switch {
+	case root.v < min:
+		return bstSearchRange(root.right, root.v, max)
+	case root.v > max:
+		return bstSearchRange(root.left, min, root.v)
+	default:
+		res = append(res, bstSearchRange(root.left, min, root.v)...)
+		res = append(res, root.v)
+		res = append(res, bstSearchRange(root.right, root.v, max)...)
+	}
+
+	return res
+}
+
+func allPossibleSubsets(a []uint16)[][]uint16 {
+	if a == nil {
+		return nil
+	}
+
+	res:= make([][]uint16, 1<<uint(len(a)))
+	var i, j uint16
+	for i = 0; i < 1<<uint(len(a)); i++ {
+		cur := make([]uint16, 0)
+		for j = 0; j < uint16(len(a)); j++ {
+			if (i & (1 << uint(j))) != 0 {
+				cur = append(cur, a[j])
+			}
+		}
+		res[i] = cur
+	}
+
+	return res
+}
+
+type graphNode struct {
+	V uint16
+	Links []*graphNode
+}
+
+type graph struct {
+	nodes []*graphNode
+}
+
+func (g *graph) topoSorting() (bool, []*graphNode) {
+	if g.nodes == nil {
+		return false, nil
+	}
+
+	res := make([]*graphNode, 0, len(g.nodes))
+
+	roots := make([]*graphNode, 0)
+	d2n := make(map[*graphNode]uint)
+
+	for _, n := range g.nodes {
+		if n.Links != nil {
+			for _, on := range n.Links {
+				d2n[on]++
+			}
+		}
+	}
+
+	for _, v := range g.nodes {
+		_, ok := d2n[v]
+		if !ok {
+			roots = append(roots, v)
+		}
+	}
+
+	for len(roots) > 0 {
+		cn := roots[len(roots) - 1]
+		roots = roots[:len(roots) - 1]
+		res = append(res, cn)
+
+		for _, n := range cn.Links {
+			d2n[n]--
+			if d2n[n] == 0 {
+				roots = append(roots, n)
+			}
+		}
+	}
+
+	return len(g.nodes) == len(res), res
+}
+
+
+// this code has bugs.
+func posNegNums(a []int) {
+	if a == nil  || len(a) < 3 {
+		return
+	}
+
+	pc := 0
+	for _, v := range a {
+		if v > 0 {
+			pc++
+		}
+	}
+
+	np := pc >= len(a) & 01
+
+	for c, pb := 0, 0; pb < len(a); {
+		switch np {
+		case true:
+			switch {
+			case a[pb] > 0:
+				a[c], a[pb] = a[pb], a[c]
+				c+=2
+				pb=c
+			default:
+				pb++
+			}
+		default:
+			switch {
+			case a[pb] < 0:
+				a[c], a[pb] = a[pb], a[c]
+				c+=2
+				pb=c
+			default:
+				pb++
+			}
+		}
+	}
+}
