@@ -239,3 +239,143 @@ func testPosNegNumss(a []int, t *testing.T) {
 		}
 	}
 }
+
+func TestJumpGame(t *testing.T) {
+	testJumpGame([]int{2,3,1,1,4}, true, t)
+	testJumpGame([]int{3,2,1,0,4}, false, t)
+
+}
+
+func testJumpGame(a []int, exp bool, t *testing.T) {
+	res := jumpGame(a)
+		if res != exp {
+			fmt.Printf("input: %v\t\n", a)
+			t.Errorf("Test name is %s, ", t.Name())
+			return
+		}
+}
+
+
+
+func TestLongestCS(t *testing.T) {
+	testLongestCS([]uint{100, 4, 200, 1, 3, 2}, 4, t)
+	testLongestCS([]uint{100, 105, 101, 1, 3, 2, 102, 104, 103}, 6, t)
+
+}
+
+func testLongestCS(a []uint, exp uint, t *testing.T) {
+	res := longestCS(a)
+	if res != exp {
+		fmt.Printf("input: %v\t Res: %v\n", a, res)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestRehashing(t *testing.T) {
+	res := rehashing([][]int{nil, []int{21,9}, []int{14}, nil})
+	fmt.Printf("Res: %v\n", res)
+}
+
+func TestHeapify(t *testing.T) {
+	h := Heap{[]int{3,2,1,4,5}}
+	testHeapify(&h, t)
+	h = Heap{[]int{9,8,7,6,5,4,3,2,1}}
+	testHeapify(&h, t)
+}
+
+func testHeapify(h *Heap, t *testing.T) {
+	h.heapify()
+	for i, v := range h.data {
+		if h.data[i>>1] > v {
+			fmt.Printf("Res: %v\n", h.data)
+			t.Errorf("Test name is %s, ", t.Name())
+			return
+		}
+	}
+}
+
+
+
+func TestCombinationSum(t *testing.T) {
+	testCombinationSum([]int{2, 3}, 3, true, t)
+	testCombinationSum([]int{2, 3, 6, 7}, 7, true, t)
+	testCombinationSum([]int{2, 3, 6, 7}, 5, true, t)
+	testCombinationSum([]int{2, 3, 6, 7}, 4, false, t)
+}
+
+func testCombinationSum(a []int, sum int, isOK bool, t *testing.T) {
+	res, ok := CombinationSum(a, sum)
+	if ok != isOK {
+		fmt.Printf("input: %v\t Res: %v\n", a, res)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+	fmt.Printf("Res: %v\n",  res)
+}
+
+func TestIsPower2(t *testing.T) {
+	fmt.Printf("input: %v\t Res: %v\n", 2, isPower2(2))
+	fmt.Printf("input: %v\t Res: %v\n", 7, isPower2(7))
+}
+
+
+
+
+func TestCWMoreWatter(t *testing.T) {
+	testCWMoreWatter([]uint{1, 3, 2}, 2, t)
+	testCWMoreWatter([]uint{1, 3, 2, 2}, 4, t)
+	testCWMoreWatter([]uint{1, 5, 2, 2, 1, 4}, 16, t)
+	testCWMoreWatter([]uint{1, 5, 2, 2, 1, 5}, 20, t)
+}
+
+func testCWMoreWatter(a []uint, exp uint, t *testing.T) {
+	res := CWMoreWatter(a)
+	if res != exp {
+		fmt.Printf("input: %v\t Res: %v\n", a, res)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestMinSubarrSum(t *testing.T) {
+	testMinSubarrSum([]int{2,3,1,2,4,3}, 7, 2, true, t)
+	testMinSubarrSum([]int{1, 2, 3, 4, 5}, 100, 0, false, t)
+
+	testMinSubarrSum([]int{2,3,1,2,4,3}, 2, 1, true, t)
+	testMinSubarrSum([]int{2,30,10,20,4,3}, 65, 5, true, t)
+
+}
+
+func testMinSubarrSum(a []int, s, exp int, isOK bool, t *testing.T) {
+	res, ok := MinSubarrSum(a, s)
+	if ok != isOK || res != exp {
+		fmt.Printf("input: %v\t Res: %v\n", a, res)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestKClosest(t *testing.T) {
+	testKClosest([]int{1, 2, 3}, []int{2, 1, 3}, 2, 3, t)
+	testKClosest([]int{1, 4, 6, 8}, []int{4,1,6}, 3, 3, t)
+	testKClosest([]int{1, 4, 6, 8}, []int{4,1,6}, 3, 5, t)
+
+	testKClosest([]int{1, 4, 6, 8}, []int{1, 4, 6, 8}, 0, 5, t)
+
+}
+
+func testKClosest(a, exp []int, r, k int, t *testing.T) {
+	res := KClosest(a, r, k)
+
+	for i, v := range res {
+	if v != exp[i] {
+		fmt.Printf("input: %v\t Res: %v\n", a, res)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+	}
+}

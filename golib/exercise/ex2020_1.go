@@ -113,7 +113,7 @@ func binarySearch(data []int, k int) (int, bool) {
 		if data[m] == k {
 			return m, true
 		}
-		if data[m] > k {
+		if data[m] < k {
 			l = m + 1
 		} else {
 			r = m - 1

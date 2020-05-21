@@ -1,6 +1,8 @@
 package exercise
 
-import "sort"
+import (
+	"sort"
+)
 
 //FBrecruiting/portal/interview_prep_hub
 
@@ -211,52 +213,54 @@ func nrDiffTriangles(a tas) uint {
 			c++
 		}
 	}
-    c++
+	c++
 	return c
 }
 
 func decodeString(inp []byte) []byte {
 
-  if inp == nil || len(inp) == 0 {
-    return []byte {}
-  }
+	if inp == nil || len(inp) == 0 {
+		return []byte{}
+	}
 
-  pre, reps, h, t := dsSubproblem(inp)
+	pre, reps, h, t := dsSubproblem(inp)
 
-  if reps != 0 {
-    pre = append(pre, generateReps(reps, inp[h+1:t])...)
-    pre = append(pre, decodeString(inp[t+1:])...)
-  }
+	if reps != 0 {
+		pre = append(pre, generateReps(reps, inp[h+1:t])...)
+		pre = append(pre, decodeString(inp[t+1:])...)
+	}
 
-  return pre
+	return pre
 }
 
-
 func dsSubproblem(p []byte) ([]byte, int, int, int) {
-  i,h,t := 0, -1, len(p)
-  reps := 0
-  pre := make([]byte, 0)
+	i, h, t := 0, -1, len(p)
+	reps := 0
+	pre := make([]byte, 0)
 
-  for ; i< len(p) && p[i] >= 'a' && p[i] <= 'z'; i++ {
-    pre = append(pre, p[i])
-  }
+	for ; i < len(p) && p[i] >= 'a' && p[i] <= 'z'; i++ {
+		pre = append(pre, p[i])
+	}
 
-  for ; i < len(p) && p[i] >= '0' && p[i] <= '9'; i++ {
-    reps = reps * 10 + int(p[i]) - int('0')
-  }
+	for ; i < len(p) && p[i] >= '0' && p[i] <= '9'; i++ {
+		reps = reps*10 + int(p[i]) - int('0')
+	}
 
-  for h = i; h < len(p) && p[h] != '['; h++ { }
-  for t = len(p) - 1; t >=0 && p[t] != ']'; t-- { }
+	for h = i; h < len(p) && p[h] != '['; h++ {
+	}
+	for t = len(p) - 1; t >= 0 && p[t] != ']'; t-- {
+	}
 
-  return pre, reps, h, t
+	return pre, reps, h, t
 }
 
 func generateReps(reps int, substr []byte) []byte {
-  res := make([]byte, 0)
-  for ; reps >0; reps-- {res = append(res, substr...)}
-  return res
+	res := make([]byte, 0)
+	for ; reps > 0; reps-- {
+		res = append(res, substr...)
+	}
+	return res
 }
-
 
 func numberOfWays(a []int, k int) uint {
 
@@ -267,12 +271,11 @@ func numberOfWays(a []int, k int) uint {
 		wc[c]++
 	}
 
-
 	for _, c := range a {
 		if wc[c] != 0 {
 			switch {
-			case k - c == c:
-				ct += wc[c] * (wc[c] - 1 ) >> 1
+			case k-c == c:
+				ct += wc[c] * (wc[c] - 1) >> 1
 				wc[c] = 0
 			default:
 				ct += wc[c] * wc[k-c]
@@ -285,7 +288,7 @@ func numberOfWays(a []int, k int) uint {
 }
 
 type bstNode struct {
-	v uint16
+	v           uint16
 	left, right *bstNode
 }
 
@@ -310,12 +313,12 @@ func bstSearchRange(root *bstNode, min, max uint16) []uint16 {
 	return res
 }
 
-func allPossibleSubsets(a []uint16)[][]uint16 {
+func allPossibleSubsets(a []uint16) [][]uint16 {
 	if a == nil {
 		return nil
 	}
 
-	res:= make([][]uint16, 1<<uint(len(a)))
+	res := make([][]uint16, 1<<uint(len(a)))
 	var i, j uint16
 	for i = 0; i < 1<<uint(len(a)); i++ {
 		cur := make([]uint16, 0)
@@ -331,7 +334,7 @@ func allPossibleSubsets(a []uint16)[][]uint16 {
 }
 
 type graphNode struct {
-	V uint16
+	V     uint16
 	Links []*graphNode
 }
 
@@ -365,8 +368,8 @@ func (g *graph) topoSorting() (bool, []*graphNode) {
 	}
 
 	for len(roots) > 0 {
-		cn := roots[len(roots) - 1]
-		roots = roots[:len(roots) - 1]
+		cn := roots[len(roots)-1]
+		roots = roots[:len(roots)-1]
 		res = append(res, cn)
 
 		for _, n := range cn.Links {
@@ -380,10 +383,9 @@ func (g *graph) topoSorting() (bool, []*graphNode) {
 	return len(g.nodes) == len(res), res
 }
 
-
 // this code has bugs.
 func posNegNums(a []int) {
-	if a == nil  || len(a) < 3 {
+	if a == nil || len(a) < 3 {
 		return
 	}
 
@@ -394,7 +396,7 @@ func posNegNums(a []int) {
 		}
 	}
 
-	np := pc >= len(a) & 01
+	np := pc >= len(a)&01
 
 	for c, pb := 0, 0; pb < len(a); {
 		switch np {
@@ -402,8 +404,8 @@ func posNegNums(a []int) {
 			switch {
 			case a[pb] > 0:
 				a[c], a[pb] = a[pb], a[c]
-				c+=2
-				pb=c
+				c += 2
+				pb = c
 			default:
 				pb++
 			}
@@ -411,11 +413,223 @@ func posNegNums(a []int) {
 			switch {
 			case a[pb] < 0:
 				a[c], a[pb] = a[pb], a[c]
-				c+=2
-				pb=c
+				c += 2
+				pb = c
 			default:
 				pb++
 			}
 		}
 	}
+}
+
+func jumpGame(js []int) bool {
+
+	rc := make([]bool, len(js))
+	rc[0] = true
+
+	for i := 0; i < len(js) && rc[i]; i++ {
+		for j := 1; j <= js[i] && i+j < len(js); rc[i+j], j = true, j+1 {
+		}
+	}
+
+	return rc[len(js)-1]
+}
+
+// Longest Consecutive Sequence
+// assume the range is from 0 to 255
+func longestCS(nums []uint) uint {
+	bm := []uint32{0, 0, 0, 0, 0, 0, 0, 0}
+
+	for _, v := range nums {
+		bm[v>>5] |= 1 << (v & 0x1f)
+	}
+
+	lcs, cl := uint(0), uint(0)
+
+	for i := 0; i < 8; i++ {
+		for j := uint(0); j < 32 && bm[i]>>j != 0; j++ {
+			switch bm[i] & (1 << j) {
+			case 0:
+				if cl > lcs {
+					lcs = cl
+				}
+				cl = 0
+			default:
+				cl++
+			}
+		}
+	}
+
+	if cl > lcs {
+		lcs = cl
+	}
+
+	return lcs
+}
+
+func CombinationSum(nums []int, s int) ([][]int, bool) {
+	if len(nums) == 0 {
+		switch s {
+		case 0:
+			return [][]int{[]int{}}, true
+		default:
+			return nil, false
+		}
+	}
+
+	var res [][]int
+	found := false
+
+	cans, ok := CombinationSum(nums[1:], s-nums[0])
+	if ok {
+		for i := 0; i < len(cans); i++ {
+			cans[i] = append(cans[i], nums[0])
+		}
+		res = cans
+		found = true
+	}
+
+	cans, ok = CombinationSum(nums[1:], s)
+	if ok {
+		res = append(res, cans...)
+		found = true
+	}
+
+	return res, found
+}
+
+func rehashing(hm [][]int) [][]int {
+	cap := len(hm) << 1
+	res := make([][]int, cap)
+
+	for _, b := range hm {
+		for _, v := range b {
+			res[v%cap] = append(res[v%cap], v)
+		}
+	}
+
+	return res
+}
+
+type Heap struct {
+	data []int
+}
+
+func (h *Heap) heapifyAt(ind uint) {
+	for pp := ind >> 1; ind != 0 && h.data[pp] > h.data[ind]; {
+		h.data[pp], h.data[ind] = h.data[ind], h.data[pp]
+		ind = ind >> 1
+		pp = ind >> 1
+	}
+}
+
+func (h *Heap) heapify() {
+	for i, _ := range h.data {
+		h.heapifyAt(uint(i))
+	}
+}
+
+func isPower2(n uint) bool {
+	return n&(n-1) == 0
+}
+
+//Container With Most Water
+func CWMoreWatter(ls []uint) uint {
+	if ls == nil || len(ls) == 0 {
+		return 0
+	}
+
+	rm := uint(0)
+	for s, e := 0, len(ls)-1; s < e; {
+		switch {
+		case ls[s] > ls[e]:
+			if rm < ls[e]*uint(e-s) {
+				rm = ls[e] * uint(e-s)
+			}
+			e--
+		default:
+			if rm < ls[s]*uint(e-s) {
+				rm = ls[s] * uint(e-s)
+			}
+			s++
+		}
+	}
+	return rm
+}
+
+// Minimum Size Subarray Sum
+func MinSubarrSum(nums []int, t int) (int, bool) {
+	if nums == nil || len(nums) == 0 {
+		return 0, false
+	}
+
+	s, e, cs := 0, 0, 0
+	for ; e < len(nums); e++ {
+		cs += nums[e]
+		if cs >= t {
+			break
+		}
+	}
+
+	if e == len(nums) {
+		return 0, false
+	}
+
+	md := 1 << 30
+	for true {
+		if cs >= t {
+			if e-s < md {
+				md = e - s
+			}
+			cs -= nums[s]
+			s++
+		} else {
+			e++
+			if e == len(nums) {
+				break
+			}
+			cs += nums[e]
+		}
+	}
+
+	return md + 1, true
+}
+
+//Find K Closest Elements
+func KClosest(e []int, t, k int) []int {
+	res := make([]int, 0, k)
+	p, ok := binarySearch(e, t)
+
+	be, af := p, p+1
+	if ok {
+		res = append(res, e[p])
+		k--
+		be, af = p-1, p+1
+	}
+
+	for k > 0 && be >= 0 && af < len(e) {
+		switch {
+		case be >= 0 && af < len(e):
+			switch {
+			case t - e[be] <= e[af] - t:
+				res = append(res, e[be])
+				be--
+				k--
+			default:
+				res = append(res, e[af])
+				af++
+				k--
+			}
+		case be == -1 && af < len(e):
+			res = append(res, e[af])
+			af++
+			k--
+		case be >= 0 && af == len(e):
+			res = append(res, e[be])
+			be--
+			k--
+		}
+	}
+
+	return res
 }
