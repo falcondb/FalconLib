@@ -1,6 +1,7 @@
 package exercise
 
 import (
+	"container/heap"
 	"sort"
 )
 
@@ -611,7 +612,7 @@ func KClosest(e []int, t, k int) []int {
 		switch {
 		case be >= 0 && af < len(e):
 			switch {
-			case t - e[be] <= e[af] - t:
+			case t-e[be] <= e[af]-t:
 				res = append(res, e[be])
 				be--
 				k--
@@ -632,4 +633,135 @@ func KClosest(e []int, t, k int) []int {
 	}
 
 	return res
+}
+
+type IntHeap []int
+
+func (h IntHeap) Len() int           { return len(h) }
+func (h IntHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h IntHeap) Less(i, j int) bool { return h[i] < h[j] }
+
+type Wdc struct {
+	s *string
+	c uint
+}
+
+type WCHeap []*Wdc
+
+func (h WCHeap) Len() int      { return len(h) }
+func (h WCHeap) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+func (h WCHeap) Less(i, j int) bool {
+	if h[i].c < h[j].c {
+		return true
+	}
+	if h[i].c == h[j].c {
+		return *h[i].s > *h[j].s
+	}
+	return false
+}
+func (h *WCHeap) Push(x interface{}) {
+	*h = append(*h, x.(*Wdc))
+}
+
+func (h *WCHeap) Pop() interface{} {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
+
+// K Frequent Words
+func KFreqWords(wds []string, k int) []string {
+	if wds == nil || len(wds) == 0 {
+		return wds
+	}
+	if k == 0 {
+		return make([]string, 0, 0)
+	}
+
+	ci := make(map[string]*Wdc, len(wds))
+
+	for i, _ := range wds {
+		wdc, ok := ci[wds[i]]
+		switch ok {
+		case true:
+			wdc.c++
+		default:
+			ci[wds[i]] = &Wdc{&wds[i], 1}
+		}
+	}
+
+	h := &WCHeap{}
+	sc := 0
+	for _, wc := range ci {
+		sc++
+		heap.Push(h, wc)
+		if sc > k {
+			heap.Pop(h)
+		}
+	}
+
+	var res []string
+	if k > h.Len() {
+		res = make([]string, h.Len())
+	} else {
+		res = make([]string, k)
+	}
+	for i := len(res) - 1; i >= 0; i-- {
+		res[i] = *heap.Pop(h).(*Wdc).s
+	}
+	return res
+}
+
+// Combination Sum
+func CombSum(n []uint, t uint) uint {
+	cs := make([]uint, t+1)
+	cs[0] = 1
+	for ct := uint(1); ct <= t; ct++ {
+		for _, v := range n {
+			if ct >= v {
+				cs[ct] += cs[ct-v]
+			}
+		}
+	}
+
+	return cs[t]
+}
+
+// Find the Missing Number, r < 30
+func MissNumber(s []byte, r uint) (uint, uint, bool) {
+	if s == nil || len(s) == 0 {
+		return r+1, r+1, false
+	}
+
+	cc := make([]uint, 10)
+	for i := uint(1); i <= r; i++ {
+		cc[i%10]++
+		if i > 9 {
+			cc[i/10]++
+		}
+	}
+
+	wc := make([]uint, 10)
+	for _, v := range s {
+		wc[v - '0']++
+	}
+
+	mns := make([]uint, 0, 2)
+
+	for i:= uint(0); i < 10; i++ {
+		if cc[i] != wc[i] {
+			mns = append(mns, i)
+		}
+	}
+
+	switch len(mns) {
+	case 1:
+		return mns[0], r+1, true
+	case 2:
+		return mns[0], mns[1], true
+	default:
+		return r+1, r+1, false
+	}
 }
