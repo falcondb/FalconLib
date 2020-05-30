@@ -732,7 +732,7 @@ func CombSum(n []uint, t uint) uint {
 // Find the Missing Number, r < 30
 func MissNumber(s []byte, r uint) (uint, uint, bool) {
 	if s == nil || len(s) == 0 {
-		return r+1, r+1, false
+		return r + 1, r + 1, false
 	}
 
 	cc := make([]uint, 10)
@@ -745,12 +745,12 @@ func MissNumber(s []byte, r uint) (uint, uint, bool) {
 
 	wc := make([]uint, 10)
 	for _, v := range s {
-		wc[v - '0']++
+		wc[v-'0']++
 	}
 
 	mns := make([]uint, 0, 2)
 
-	for i:= uint(0); i < 10; i++ {
+	for i := uint(0); i < 10; i++ {
 		if cc[i] != wc[i] {
 			mns = append(mns, i)
 		}
@@ -758,10 +758,284 @@ func MissNumber(s []byte, r uint) (uint, uint, bool) {
 
 	switch len(mns) {
 	case 1:
-		return mns[0], r+1, true
+		return mns[0], r + 1, true
 	case 2:
 		return mns[0], mns[1], true
 	default:
-		return r+1, r+1, false
+		return r + 1, r + 1, false
+	}
+}
+
+// Partition Equal Subset Sum
+func PartSubset(ns []uint) bool {
+	t := uint(0)
+	for _, v := range ns {
+		t += v
+	}
+
+	if t&0x1 == 1 {
+		return false
+	}
+
+	t = t >> 1
+
+	return subsetSum(ns, t)
+}
+
+func subsetSum(ns []uint, t uint) bool {
+	if len(ns) == 0 {
+		return t == 0
+	}
+
+	if t >= ns[len(ns)-1] && subsetSum(ns[:len(ns)-1], t-ns[len(ns)-1]) {
+		return true
+	}
+
+	return subsetSum(ns[:len(ns)-1], t)
+}
+
+// Binary Tree Longest Consecutive Sequence II
+var btLCSMax = uint(0)
+
+func BTLCS(r *bstNode) uint {
+	btLCSMax = 0
+	btLCS(r)
+	return btLCSMax
+}
+
+func btLCS(r *bstNode) (uint, uint) {
+	if r == nil {
+		return 0, 0
+	}
+
+	lam, ldm, ram, rdm := uint(1), uint(1), uint(1), uint(1)
+
+	if r.left != nil {
+		if r.left.v == r.v+1 || r.left.v+1 == r.v {
+			lam, ldm = btLCS(r.left)
+			if r.left.v == r.v+1 {
+				lam++
+			}
+			if r.left.v+1 == r.v {
+				ldm++
+			}
+		}
+	}
+
+	if r.right != nil {
+		if r.right.v == r.v+1 || r.right.v+1 == r.v {
+			ram, rdm = btLCS(r.right)
+			if r.right.v == r.v+1 {
+				ram++
+			}
+			if r.right.v+1 == r.v {
+				rdm++
+			}
+		}
+	}
+
+	if lam+rdm-1 > btLCSMax {
+		btLCSMax = lam + rdm - 1
+	}
+	if ldm+ram-1 > btLCSMax {
+		btLCSMax = ldm + ram - 1
+	}
+
+	if lam < ram {
+		lam = ram
+	}
+	if ldm < rdm {
+		ldm = rdm
+	}
+
+	return lam, ldm
+}
+
+// Maximum Average Subarray II
+func MaxAvgSubarr(ns []int, l int) (int, int) {
+	if ns == nil || len(ns) < l {
+		return 0, 1
+	}
+
+	sumbuf := make([]int, len(ns)+1)
+
+	for i, v := range ns {
+		sumbuf[i+1] = sumbuf[i] + v
+	}
+
+	msum, ml := sumbuf[len(ns)]-sumbuf[len(ns)-l], l
+
+	for e := len(ns); e >= l; e-- {
+		for h := e - l; h >= 0; h-- {
+			cs := sumbuf[e] - sumbuf[h]
+			if msum*(e-h) < cs*ml {
+				msum = cs
+				ml = e - h
+			}
+		}
+	}
+
+	return msum, ml
+}
+
+type K9board struct {
+	bd             [][]byte
+	sx, sy, tx, ty int
+	bh, bw         int
+}
+
+type coor struct {
+	x, y int
+}
+
+//Knight Shortest Path
+func (b *K9board) K9Path() int {
+	// sanity check to be added
+	cands := make([]coor, 0)
+	cands = append(cands, coor{b.sx, b.sy})
+	st := -1
+
+	for len(cands) != 0 {
+		cp := cands[0]
+		st++
+		if b.wins(&cp) {
+			return st
+		}
+		cands = cands[1:]
+
+		b.bd[cp.x][cp.y] = 1
+		switch {
+		case cp.x > 0 && cp.y > 1 && b.bd[cp.x-1][cp.y-2] != 1:
+			cands = append(cands, coor{cp.x - 1, cp.y - 2})
+		case cp.x > 1 && cp.y > 0 && b.bd[cp.x-2][cp.y-1] != 1:
+			cands = append(cands, coor{cp.x - 2, cp.y - 1})
+		case cp.x > 0 && cp.y+1 < b.bh && b.bd[cp.x-1][cp.y+2] != 1:
+			cands = append(cands, coor{cp.x - 1, cp.y + 2})
+		case cp.x > 1 && cp.y < b.bh && b.bd[cp.x-2][cp.y+1] != 1:
+			cands = append(cands, coor{cp.x - 2, cp.y + 1})
+
+		case cp.x < b.bw && cp.y > 1 && b.bd[cp.x+1][cp.y-2] != 1:
+			cands = append(cands, coor{cp.x + 1, cp.y - 2})
+		case cp.x+1 > b.bw && cp.y > 0 && b.bd[cp.x+2][cp.y-1] != 1:
+			cands = append(cands, coor{cp.x + 2, cp.y - 1})
+		case cp.x < b.bw && cp.y+1 < b.bh && b.bd[cp.x+1][cp.y+2] != 1:
+			cands = append(cands, coor{cp.x + 1, cp.y + 2})
+		case cp.x+1 > b.bw && cp.y > b.bh && b.bd[cp.x+2][cp.y+1] != 1:
+			cands = append(cands, coor{cp.x + 2, cp.y + 1})
+		}
+	}
+	return -1
+}
+
+func (b *K9board) wins(p *coor) bool {
+	if p.x == b.tx && p.y == b.ty {
+		return true
+	}
+	return false
+}
+
+//Minimum number of swaps required to sort an array of first N number
+func minSwap2Sorted(ns []uint) uint {
+	if ns == nil {
+		return 0
+	}
+
+	ct := uint(0)
+	for i, _ := range ns {
+		for ns[i] != uint(i)+1 {
+			ct++
+			ns[ns[i]-1], ns[i] = ns[i], ns[ns[i]-1]
+		}
+	}
+	return ct
+}
+
+//Maximum number of unique values
+func maxOfUniq(ns []int) uint {
+	if ns == nil {
+		return 0
+	}
+
+	sort.Ints(ns)
+
+	l := len(ns)
+
+	bm := make([]int, l>>5+1)
+
+	for _, v := range ns {
+		switch {
+		case bm[(v-1)>>5]&(1<<uint((v-1)&0x1f)) == 0:
+			bm[(v-1)>>5] = (1 << uint((v-1)&0x1f)) | bm[(v-1)>>5]
+		case bm[(v)>>5]&(1<<uint((v)&0x1f)) == 0:
+			bm[(v)>>5] = (1 << uint((v)&0x1f)) | bm[(v)>>5]
+		case bm[(v+1)>>5]&(1<<uint((v+1)&0x1f)) == 0:
+			bm[(v+1)>>5] = (1 << uint((v+1)&0x1f)) | bm[(v+1)>>5]
+		}
+	}
+
+	ct := uint(0)
+
+	for _, v := range bm {
+		for v != 0 {
+			ct++
+			v = v & (v - 1)
+		}
+	}
+
+	return ct
+}
+
+//Binary Tree Vertical Order Traversal
+type dlink struct {
+	pre, after *dlink
+	ns         []uint16
+}
+
+func BTVertOrder(r *bstNode) [][]uint16 {
+	if r == nil {
+		return nil
+	}
+
+	rtln := dlink{nil, nil, nil}
+	btVertOrder(r, &rtln)
+
+	res := make([][]uint16, 0)
+	for cn := &rtln; cn != nil; cn = cn.pre {
+		res = append(res, cn.ns)
+	}
+
+	for i := 0; i < len(res)>>1; i++ {
+		res[i], res[len(res)-1-i] = res[len(res)-1-i], res[i]
+	}
+
+	for cn := rtln.after; cn != nil; cn = cn.after {
+		res = append(res, cn.ns)
+	}
+
+	return res
+}
+
+func btVertOrder(r *bstNode, ln *dlink) {
+	if r == nil {
+		return
+	}
+
+	if ln.ns == nil {
+		ln.ns = []uint16{r.v}
+	} else {
+		ln.ns = append(ln.ns, r.v)
+	}
+
+	if r.left != nil {
+		if ln.pre == nil {
+			ln.pre = &dlink{nil, ln, nil}
+		}
+		btVertOrder(r.left, ln.pre)
+	}
+	if r.right != nil {
+		if ln.after == nil {
+			ln.after = &dlink{ln, nil, nil}
+		}
+		btVertOrder(r.right, ln.after)
 	}
 }
