@@ -393,7 +393,6 @@ func testKFreqWords(a, exp []string, k int, t *testing.T) {
 	}
 }
 
-
 func TestCombSum(t *testing.T) {
 	testCombSum([]uint{1, 2, 4}, 4, 6, t)
 	testCombSum([]uint{1, 2}, 4, 5, t)
@@ -407,8 +406,6 @@ func testCombSum(a []uint, tg, exp uint, t *testing.T) {
 		return
 	}
 }
-
-
 
 func TestMissNumber(t *testing.T) {
 	testMissNumber([]byte("19201234567891011121314151618"), 20, 1, 7, t)
@@ -425,7 +422,6 @@ func testMissNumber(a []byte, r uint, exp1, exp2 uint, t *testing.T) {
 	}
 }
 
-
 func TestPartSubset(t *testing.T) {
 	testPartSubset([]uint{1, 5, 11, 5}, true, t)
 	testPartSubset([]uint{1, 2, 3, 9}, false, t)
@@ -439,7 +435,6 @@ func testPartSubset(a []uint, exp bool, t *testing.T) {
 		return
 	}
 }
-
 
 func TestBTLCS(t *testing.T) {
 	testBTLCS(&bstNode{1, &bstNode{2, &bstNode{3, nil, nil}, nil}, &bstNode{0, nil, nil}}, 4, t)
@@ -455,19 +450,18 @@ func testBTLCS(r *bstNode, exp uint, t *testing.T) {
 	}
 }
 
-
 func TestMaxAvgSubarr(t *testing.T) {
-	testMaxAvgSubarr([]int{1,12,-5,-6,50,3}, 3, 47, 3, t)
+	testMaxAvgSubarr([]int{1, 12, -5, -6, 50, 3}, 3, 47, 3, t)
 	testMaxAvgSubarr([]int{5}, 1, 5, 1, t)
 
-	testMaxAvgSubarr([]int{1,60,50,50,50,3}, 3, 160, 3, t)
-	testMaxAvgSubarr([]int{1,60,50,50,50,3}, 4, 210, 4, t)
-	testMaxAvgSubarr([]int{1,60,50,50,50,3}, 2, 110, 2, t)
-	testMaxAvgSubarr([]int{1,60,-100,100,-50,3}, 2, 61, 2, t)
+	testMaxAvgSubarr([]int{1, 60, 50, 50, 50, 3}, 3, 160, 3, t)
+	testMaxAvgSubarr([]int{1, 60, 50, 50, 50, 3}, 4, 210, 4, t)
+	testMaxAvgSubarr([]int{1, 60, 50, 50, 50, 3}, 2, 110, 2, t)
+	testMaxAvgSubarr([]int{1, 60, -100, 100, -50, 3}, 2, 61, 2, t)
 }
 
 func testMaxAvgSubarr(ns []int, l int, ems, eml int, t *testing.T) {
-	ms, ml := MaxAvgSubarr(ns, l )
+	ms, ml := MaxAvgSubarr(ns, l)
 	if ms != ems || ml != eml {
 		fmt.Printf("input: %v\t%v\t%v\t\n", ns, ms, ml)
 		t.Errorf("Test name is %s, ", t.Name())
@@ -475,11 +469,9 @@ func testMaxAvgSubarr(ns []int, l int, ems, eml int, t *testing.T) {
 	}
 }
 
-
-
 func TestMinSwap2Sorted(t *testing.T) {
-	testMinSwap2Sorted([]uint{ 7, 1, 3, 2, 4, 5, 6}, 5, t)
-	testMinSwap2Sorted([]uint{2, 3, 4, 1, 5 }, 3, t)
+	testMinSwap2Sorted([]uint{7, 1, 3, 2, 4, 5, 6}, 5, t)
+	testMinSwap2Sorted([]uint{2, 3, 4, 1, 5}, 3, t)
 }
 
 func testMinSwap2Sorted(ns []uint, e uint, t *testing.T) {
@@ -491,18 +483,16 @@ func testMinSwap2Sorted(ns []uint, e uint, t *testing.T) {
 	}
 }
 
-
-
 func TestMaxOfUniq(t *testing.T) {
 	testMaxOfUniq([]int{1, 2, 4, 4}, 4, t)
 	testMaxOfUniq([]int{1, 1, 1, 1}, 3, t)
 	testMaxOfUniq([]int{1, 1, 1, 4}, 4, t)
 	testMaxOfUniq([]int{1, 1, 1, 3}, 4, t)
 	testMaxOfUniq([]int{1, 1, 1, 1, 2}, 4, t)
-	testMaxOfUniq([]int{1, 1, 1, 1,1, 1, 1, 2}, 4, t)
+	testMaxOfUniq([]int{1, 1, 1, 1, 1, 1, 1, 2}, 4, t)
 
-	testMaxOfUniq([]int{ 7, 1, 3, 2, 4, 5, 6}, 7, t)
-	testMaxOfUniq([]int{2, 2, 3, 3, 4 }, 5, t)
+	testMaxOfUniq([]int{7, 1, 3, 2, 4, 5, 6}, 7, t)
+	testMaxOfUniq([]int{2, 2, 3, 3, 4}, 5, t)
 }
 
 func testMaxOfUniq(ns []int, e uint, t *testing.T) {
@@ -514,7 +504,6 @@ func testMaxOfUniq(ns []int, e uint, t *testing.T) {
 	}
 }
 
-
 func TestBTVertOrder(t *testing.T) {
 	//[[9],[3,15],[20],[7]]
 	//3
@@ -524,17 +513,17 @@ func TestBTVertOrder(t *testing.T) {
 	//   /\
 	//  /  \
 	// 15   7
-	testBTVertOrder(&bstNode{3,&bstNode{9,nil, nil}, &bstNode{20, &bstNode{15, nil, nil}, &bstNode{7, nil,nil}}},
-	[][]uint16{ []uint16{9}, []uint16{3,15}, []uint16{20}, []uint16{7} }, t)
+	testBTVertOrder(&bstNode{3, &bstNode{9, nil, nil}, &bstNode{20, &bstNode{15, nil, nil}, &bstNode{7, nil, nil}}},
+		[][]uint16{[]uint16{9}, []uint16{3, 15}, []uint16{20}, []uint16{7}}, t)
 
-//Output: [[4],[9],[3,0,1],[8],[7]]
-// 	   3
-//	  /\
-//	9   8
-// /  \/  \
-// 4  01   7
-	testBTVertOrder(&bstNode{3,&bstNode{9,&bstNode{4, nil,nil}, &bstNode{0, nil, nil}}, &bstNode{8, &bstNode{1, nil, nil}, &bstNode{7, nil,nil}}},
-		[][]uint16{ []uint16{4}, []uint16{9}, []uint16{3,0,1}, []uint16{8}, []uint16{7} }, t)
+	//Output: [[4],[9],[3,0,1],[8],[7]]
+	// 	   3
+	//	  /\
+	//	9   8
+	// /  \/  \
+	// 4  01   7
+	testBTVertOrder(&bstNode{3, &bstNode{9, &bstNode{4, nil, nil}, &bstNode{0, nil, nil}}, &bstNode{8, &bstNode{1, nil, nil}, &bstNode{7, nil, nil}}},
+		[][]uint16{[]uint16{4}, []uint16{9}, []uint16{3, 0, 1}, []uint16{8}, []uint16{7}}, t)
 }
 
 func testBTVertOrder(rt *bstNode, e [][]uint16, t *testing.T) {
@@ -543,10 +532,97 @@ func testBTVertOrder(rt *bstNode, e [][]uint16, t *testing.T) {
 	for i, _ := range r {
 		for j, _ := range r[i] {
 			if r[i][j] != e[i][j] {
-				fmt.Printf("input: %v\t\n",  r)
+				fmt.Printf("input: %v\t\n", r)
 				t.Errorf("Test name is %s, ", t.Name())
 				return
 			}
 		}
+	}
+}
+
+func TestWallsGates(t *testing.T) {
+	testWallsGates([][]int{[]int{SIGNROOM, -1, 0, SIGNROOM}, []int{SIGNROOM, SIGNROOM, SIGNROOM, -1}, []int{SIGNROOM, -1, SIGNROOM, -1}, []int{0, -1, SIGNROOM, SIGNROOM}}, [][]int{[]int{3, -1, 0, 1}, []int{2, 2, 1, -1}, []int{1, -1, 2, -1}, []int{0, -1, 3, 4}}, t)
+	testWallsGates([][]int{[]int{0, -1}, []int{SIGNROOM, SIGNROOM}}, [][]int{[]int{0, -1}, []int{1, 2}}, t)
+}
+
+func testWallsGates(b [][]int, e [][]int, t *testing.T) {
+	wallsGates(b)
+	for i, _ := range b {
+		for j, _ := range b[i] {
+			if b[i][j] != e[i][j] {
+				fmt.Printf("input: %v\t\n", b)
+				t.Errorf("Test name is %s, ", t.Name())
+				return
+			}
+		}
+	}
+}
+
+func TestCout1s(t *testing.T) {
+	testCout1s(5, []uint{0, 1, 1, 2, 1, 2}, t)
+	testCout1s(3, []uint{0, 1, 1, 2}, t)
+
+}
+
+func testCout1s(m uint, e []uint, t *testing.T) {
+	r := cout1s(m)
+	for i, v := range r {
+		if e[i] != v {
+			fmt.Printf("input: %v\t%v\t\n", m, r)
+			t.Errorf("Test name is %s, ", t.Name())
+			return
+		}
+	}
+}
+
+func TestMaxPali(t *testing.T) {
+	testMaxPali("bbbab", 4, t)
+	testMaxPali("bbbbb", 5, t)
+}
+
+func testMaxPali(s string, e uint, t *testing.T) {
+	r := maxPali(s)
+	if e != r {
+		fmt.Printf("input: %v\t%v\t\n", s, r)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+
+
+func TestOnesAndZeors(t *testing.T) {
+	testOnesAndZeors([]string{"10", "0001", "111001", "1", "0"}, 5, 3, 4, t)
+	testOnesAndZeors([]string{"10", "0001", "111001", "1", "0"}, 7, 7, 5, t)
+}
+
+func testOnesAndZeors(ss []string, os, zs int,  e uint, t *testing.T) {
+	r := onesAndZeors(ss, os, zs)
+	if e != r {
+		fmt.Printf("input: %v\t%v\t\n", ss, r)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+
+
+func TestCoinChange(t *testing.T) {
+	testCoinChange([]int{1, 2, 5}, 11, 3,  t)
+	testCoinChange([]int{2}, 3, -1, t)
+
+	testCoinChange([]int{1, 2, 5, 10}, 18, 4, t)
+	testCoinChange([]int{ 2, 5, 10}, 58, 9, t)
+	testCoinChange([]int{1, 2, 5, 10}, 58, 8, t)
+}
+
+func testCoinChange(cs []int, tg int,  e int, t *testing.T) {
+	r := coinChangeBuf(cs, tg)
+	if e != r {
+		fmt.Printf("input: %v\t%v\t\n", cs, r)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
 	}
 }

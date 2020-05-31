@@ -1039,3 +1039,203 @@ func btVertOrder(r *bstNode, ln *dlink) {
 		btVertOrder(r.right, ln.after)
 	}
 }
+
+//Factorization
+func factorization(num uint) [][]uint {
+	res := make([][]uint, 0)
+	if num == 1 {
+		return res
+	}
+
+	for i := uint(2); i*i <= num; i++ {
+		if num%i == 0 {
+			subres := factorization(num / i)
+			for _, v := range subres {
+				res = append(res, append([]uint{i}, v...))
+			}
+		}
+	}
+	res = append(res, []uint{num})
+
+	return res
+}
+
+const (
+	SIGNROOM = 0x7fffffff
+	SIGNGATE = 0
+	SIGNWALL = 0xffffffff
+)
+
+//Walls and Gates
+func wallsGates(bd [][]int) {
+	if bd == nil || len(bd) == 0 {
+		return
+	}
+
+	ce := make([]*coor, 0)
+
+	for y, _ := range bd {
+		for x, v := range bd[y] {
+			if v == SIGNGATE {
+				ce = append(ce, &coor{x, y})
+			}
+		}
+	}
+
+	ct := 0
+	for len(ce) != 0 {
+		ne := make([]*coor, 0)
+		ct++
+		for _, c := range ce {
+
+			if c.x > 0 && bd[c.y][c.x-1] == SIGNROOM {
+				ne = append(ne, &coor{c.x - 1, c.y})
+				bd[c.y][c.x - 1] = ct
+			}
+			if c.y > 0 && bd[c.y-1][c.x] == SIGNROOM {
+				ne = append(ne, &coor{c.x, c.y - 1})
+				bd[c.y - 1][c.x] = ct
+			}
+			if c.x+1 < len(bd[0]) && bd[c.y][c.x+1] == SIGNROOM {
+				ne = append(ne, &coor{c.x + 1, c.y})
+				bd[c.y][c.x + 1] = ct
+			}
+			if c.y+1 < len(bd) && bd[c.y+1][c.x] == SIGNROOM {
+				ne = append(ne, &coor{c.x, c.y + 1})
+				bd[c.y + 1][c.x] = ct
+			}
+		}
+		ce = ne
+	}
+}
+
+
+//Counting Bits
+func cout1s(m uint) []uint {
+	res := make([]uint,0, m+1)
+
+	for i := uint(0); i <= m; i++ {
+		n := i
+		ct := uint(0)
+		for n != 0 {
+			ct++
+			n = n & (n-1)
+		}
+		res = append(res, ct)
+	}
+
+	return res
+}
+
+// Longest Palindromic Subsequence
+func maxPali(s string) uint {
+	if len(s) == 0 {
+		return 0
+	}
+	if len(s) == 1 {
+		return 1
+	}
+
+	max := uint(0)
+
+	if s[0] == s[len(s) - 1] {
+		max = 2 + maxPali(s[1:len(s)-1])
+	} else {
+		sr := maxPali(s[1:])
+		if max < sr {
+			max = sr
+		}
+
+		sr = maxPali(s[:len(s) - 1])
+		if max < sr {
+			max = sr
+		}
+		sr = maxPali(s[1:len(s) - 1])
+		if max < sr {
+			max = sr
+		}
+	}
+
+	return max
+}
+
+
+// Ones and Zeroes
+func onesAndZeors(ss []string, os, zs int) uint {
+	if len(ss) == 0 || os < 0 || zs < 0 {
+		return 0
+	}
+
+	los, lzs := 0, 0
+	for _, c := range ss[len(ss) - 1]{
+		switch c {
+		case '0':
+			lzs++
+		case '1':
+			los++
+		}
+	}
+
+	tl := 1 + onesAndZeors(ss[:len(ss)-1], os - los, zs - lzs)
+	ntl := onesAndZeors(ss[:len(ss)-1], os, zs)
+
+	if tl > ntl {
+		return tl
+	} else {
+		return ntl
+	}
+}
+
+//Coin Change
+func coinChange(cs []int, t int) int {
+	if t < 0 {
+		return -1
+	}
+
+	if t == 0 {
+		return 0
+	}
+
+	min := 0x7fffffff
+	for _, c := range cs {
+		mc := coinChange(cs, t-c)
+		if mc != -1 && min > mc + 1 {
+			min = mc + 1
+		}
+	}
+
+	if min == 0x7fffffff {
+		return -1
+	}
+
+	return min
+}
+
+func coinChangeBuf(cs []int, t int) int {
+	buf := make([]int, t+1)
+
+	for i, _ := range buf {
+		buf[i] = 0x7fffffff
+	}
+
+	for _, c := range cs {
+		buf[c] = 1
+	}
+
+	for prog := true ; prog; prog = false {
+		for _, c := range cs {
+			for p := 1; p < t+1 && buf[p] != 0; p++ {
+				if p + c < t + 1 && buf[p+c] > buf[p] {
+					buf[p+c] = buf[p] + 1
+					prog = true
+				}
+			}
+		}
+	}
+
+	if buf[t] == 0x7fffffff {
+		return -1
+	}
+
+	return buf[t]
+}
