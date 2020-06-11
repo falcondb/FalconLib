@@ -626,3 +626,146 @@ func testCoinChange(cs []int, tg int,  e int, t *testing.T) {
 		return
 	}
 }
+
+func TestNumIslands(t *testing.T) {
+
+	g := bigIsl{[][]byte{[]byte {1,1,0,0,0},[]byte {0,1,0,0,1},[]byte {0,0,0,1,1},[]byte {0,0,0,0,0},[]byte{0,0,0,0,1}}, 2, 0}
+	//testNumIslands( &g,2, t)
+
+	g = bigIsl{[][]byte{[]byte {1,1,0,0,0},[]byte {0,1,0,0,1},[]byte {0,0,0,1,1},[]byte {0,0,0,0,0},[]byte{0,0,0,0,1}}, 1, 0}
+	//testNumIslands( &g,3, t)
+
+	g = bigIsl{[][]byte{[]byte {1,1,0,0,0},[]byte {0,1,0,0,1},[]byte {0,0,0,1,1},[]byte {0,0,0,0,0},[]byte{0,0,0,0,1}}, 4, 0}
+	testNumIslands( &g,0, t)
+
+	g = bigIsl{[][]byte{[]byte {1,1,0,0,0},[]byte {0,1,0,0,1},[]byte {0,1,1,1,1},[]byte {0,0,0,0,0},[]byte{0,0,0,0,1}}, 4, 0}
+	testNumIslands( &g,1, t)
+
+	g = bigIsl{[][]byte{[]byte {1,1,0,0,0},[]byte {1,1,0,0,1},[]byte {0,0,0,1,1},[]byte {0,0,0,1,1},[]byte{0,0,0,1,1}}, 4, 0}
+	testNumIslands( &g,2, t)
+
+	g = bigIsl{[][]byte{[]byte{1,0},[]byte {0,1}}, 1, 0}
+	testNumIslands( &g,2, t)
+
+}
+
+func testNumIslands(g *bigIsl,  e int, t *testing.T) {
+	g.calc()
+	if e != g.iss {
+		fmt.Printf("input: %v\t%v\t\n", g.iss, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestShoestPalindrome(t *testing.T) {
+	testShoestPalindrome([]byte("aacecaaa"), 1, t)
+	testShoestPalindrome([]byte("dcbabcd"), 0,t)
+	testShoestPalindrome([]byte("abcd"), 3, t)
+}
+
+func testShoestPalindrome(s []byte, e int, t *testing.T) {
+	res := stestPali(s)
+	if e != res {
+		fmt.Printf("input: %v\t%v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestSplitStr(t *testing.T) {
+	testSplitStr([]byte("123"),  t)
+	testSplitStr([]byte("12345"),  t)
+}
+
+func testSplitStr(s []byte, t *testing.T) {
+	res := splitStr(s)
+	for _, ss := range res {
+		for _, s := range ss {
+			fmt.Printf("%v\t", s)
+		}
+		fmt.Printf("\n")
+	}
+	fmt.Printf("-------------\n")
+}
+
+
+
+func TestWordBrk3(t *testing.T) {
+	testWordBrk3([]string{"Cat", "Mat", "Ca", "tM", "at", "C", "Dog", "og", "Do"}, "CatMat", 3,  t)
+	testWordBrk3([]string{"Cat", "Mat", "Ca", "tM", "at", "C", "Dog", "og", "Do"}, "CatDo", 2,  t)
+	testWordBrk3([]string{}, "a", 0,  t)
+}
+
+func testWordBrk3(dict []string, s string, e int, t *testing.T) {
+	res := wordBrk3(dict, s)
+	if e != res {
+		fmt.Printf("input: %v\t%v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestSwues(t *testing.T) {
+	testSwues([]int{1, 2, 1, 3, 3}, 3, 5,  t)
+	testSwues([]int{1, 2, 1, 2, 1}, 3, 3, t)
+	testSwues([]int{1, 2, 1, 1, 1}, 3, 2, t)
+	testSwues([]int{1, 2, 1, 1, 1}, 2, 4, t)
+}
+
+func testSwues(ns []int, ws, e int, t *testing.T) {
+	res := swues(ns, ws)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+func TestTrimBST(t *testing.T) {
+	testTrimBST(&bstNode{8, &bstNode{3, &bstNode{1, nil, nil},
+		&bstNode{6, &bstNode{4, nil, nil}, &bstNode{7, nil,nil}}},
+		&bstNode{10, nil, &bstNode{14, &bstNode{13, nil, nil},nil} }},
+		5, 13, t)
+}
+
+func testTrimBST(r *bstNode, min, max uint16, t *testing.T) {
+	res := trimBST(r, min, max)
+	printBST(res)
+}
+
+
+
+func TestCutRod(t *testing.T) {
+	testCutRod([]uint{1, 5, 8, 9, 10, 17, 17, 20}, 8, 22,  t)
+	testCutRod([]uint{3, 5, 8, 9, 10, 17, 17, 20}, 8, 24, t)
+
+}
+
+func testCutRod(ns []uint, ws, e uint, t *testing.T) {
+	res := cutRod(ns, ws)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestMinPart(t *testing.T) {
+	testMinPart([]int{1, 6, 11, 5}, 1,  t)
+	testMinPart([]int{1, 2, 3, 4}, 0, t)
+
+}
+
+func testMinPart(ns []int, e int, t *testing.T) {
+	res := minPart(ns)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}

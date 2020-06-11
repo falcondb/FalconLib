@@ -2,6 +2,7 @@ package exercise
 
 import (
 	"container/heap"
+	"fmt"
 	"sort"
 )
 
@@ -119,7 +120,7 @@ func __reverseEven(head *listNode) *listNode {
 	}
 
 	var h, t *listNode
-	for h = head; h.Next != nil && h.Next.V&0x1 == 1; h = h.Next {
+	for h = head; h.Next != nil && h.Next.V&0x01 == 1; h = h.Next {
 	}
 
 	if h.Next == nil {
@@ -1090,36 +1091,35 @@ func wallsGates(bd [][]int) {
 
 			if c.x > 0 && bd[c.y][c.x-1] == SIGNROOM {
 				ne = append(ne, &coor{c.x - 1, c.y})
-				bd[c.y][c.x - 1] = ct
+				bd[c.y][c.x-1] = ct
 			}
 			if c.y > 0 && bd[c.y-1][c.x] == SIGNROOM {
 				ne = append(ne, &coor{c.x, c.y - 1})
-				bd[c.y - 1][c.x] = ct
+				bd[c.y-1][c.x] = ct
 			}
 			if c.x+1 < len(bd[0]) && bd[c.y][c.x+1] == SIGNROOM {
 				ne = append(ne, &coor{c.x + 1, c.y})
-				bd[c.y][c.x + 1] = ct
+				bd[c.y][c.x+1] = ct
 			}
 			if c.y+1 < len(bd) && bd[c.y+1][c.x] == SIGNROOM {
 				ne = append(ne, &coor{c.x, c.y + 1})
-				bd[c.y + 1][c.x] = ct
+				bd[c.y+1][c.x] = ct
 			}
 		}
 		ce = ne
 	}
 }
 
-
 //Counting Bits
 func cout1s(m uint) []uint {
-	res := make([]uint,0, m+1)
+	res := make([]uint, 0, m+1)
 
 	for i := uint(0); i <= m; i++ {
 		n := i
 		ct := uint(0)
 		for n != 0 {
 			ct++
-			n = n & (n-1)
+			n = n & (n - 1)
 		}
 		res = append(res, ct)
 	}
@@ -1138,7 +1138,7 @@ func maxPali(s string) uint {
 
 	max := uint(0)
 
-	if s[0] == s[len(s) - 1] {
+	if s[0] == s[len(s)-1] {
 		max = 2 + maxPali(s[1:len(s)-1])
 	} else {
 		sr := maxPali(s[1:])
@@ -1146,11 +1146,11 @@ func maxPali(s string) uint {
 			max = sr
 		}
 
-		sr = maxPali(s[:len(s) - 1])
+		sr = maxPali(s[:len(s)-1])
 		if max < sr {
 			max = sr
 		}
-		sr = maxPali(s[1:len(s) - 1])
+		sr = maxPali(s[1 : len(s)-1])
 		if max < sr {
 			max = sr
 		}
@@ -1159,7 +1159,6 @@ func maxPali(s string) uint {
 	return max
 }
 
-
 // Ones and Zeroes
 func onesAndZeors(ss []string, os, zs int) uint {
 	if len(ss) == 0 || os < 0 || zs < 0 {
@@ -1167,7 +1166,7 @@ func onesAndZeors(ss []string, os, zs int) uint {
 	}
 
 	los, lzs := 0, 0
-	for _, c := range ss[len(ss) - 1]{
+	for _, c := range ss[len(ss)-1] {
 		switch c {
 		case '0':
 			lzs++
@@ -1176,7 +1175,7 @@ func onesAndZeors(ss []string, os, zs int) uint {
 		}
 	}
 
-	tl := 1 + onesAndZeors(ss[:len(ss)-1], os - los, zs - lzs)
+	tl := 1 + onesAndZeors(ss[:len(ss)-1], os-los, zs-lzs)
 	ntl := onesAndZeors(ss[:len(ss)-1], os, zs)
 
 	if tl > ntl {
@@ -1199,7 +1198,7 @@ func coinChange(cs []int, t int) int {
 	min := 0x7fffffff
 	for _, c := range cs {
 		mc := coinChange(cs, t-c)
-		if mc != -1 && min > mc + 1 {
+		if mc != -1 && min > mc+1 {
 			min = mc + 1
 		}
 	}
@@ -1222,10 +1221,10 @@ func coinChangeBuf(cs []int, t int) int {
 		buf[c] = 1
 	}
 
-	for prog := true ; prog; prog = false {
+	for prog := true; prog; prog = false {
 		for _, c := range cs {
 			for p := 1; p < t+1 && buf[p] != 0; p++ {
-				if p + c < t + 1 && buf[p+c] > buf[p] {
+				if p+c < t+1 && buf[p+c] > buf[p] {
 					buf[p+c] = buf[p] + 1
 					prog = true
 				}
@@ -1238,4 +1237,294 @@ func coinChangeBuf(cs []int, t int) int {
 	}
 
 	return buf[t]
+}
+
+// Number of Big Islands
+type bigIsl struct {
+	bd         [][]byte
+	isize, iss int
+}
+
+func (g *bigIsl) calc() {
+
+	for i := range g.bd {
+		for j := range g.bd[0] {
+			if g.bd[i][j] == 1 {
+				g.explore(i, j)
+			}
+		}
+	}
+}
+
+func (g *bigIsl) explore(x, y int) {
+	backlog := make([]coor, 0)
+	backlog = append(backlog, coor{x, y})
+
+	cs := 1
+	if cs == g.isize {
+		g.iss++
+	}
+	g.bd[x][y] = 2
+
+	for len(backlog) != 0 {
+		cur := backlog[0]
+		backlog = backlog[1:]
+
+		if cur.x > 0 && g.bd[cur.x-1][cur.y] == 1 {
+			cs++
+			if cs == g.isize {
+				g.iss++
+			}
+			g.bd[cur.x-1][cur.y] = 2
+			backlog = append(backlog, coor{cur.x - 1, cur.y})
+		}
+
+		if cur.y > 0 && g.bd[cur.x][cur.y-1] == 1 {
+			cs++
+			if cs == g.isize {
+				g.iss++
+			}
+			g.bd[cur.x][cur.y-1] = 2
+			backlog = append(backlog, coor{cur.x, cur.y - 1})
+		}
+
+		if cur.y+1 < len(g.bd[0]) && g.bd[cur.x][cur.y+1] == 1 {
+			cs++
+			if cs == g.isize {
+				g.iss++
+			}
+			g.bd[cur.x][cur.y+1] = 2
+			backlog = append(backlog, coor{cur.x, cur.y + 1})
+		}
+
+		if cur.x+1 < len(g.bd) && g.bd[cur.x+1][cur.y] == 1 {
+			cs++
+			if cs == g.isize {
+				g.iss++
+			}
+			g.bd[cur.x+1][cur.y] = 2
+			backlog = append(backlog, coor{cur.x + 1, cur.y})
+		}
+	}
+}
+
+// Shortest Palindrome
+func stestPali(s []byte) int {
+
+	for i := len(s); i > 0; i-- {
+		if isPali(s[:i]) {
+			return len(s) - i
+		}
+	}
+
+	return len(s) - 1
+}
+
+func isPali(s []byte) bool {
+	if len(s) == 0 {
+		return true
+	}
+	for i := 0; i <= len(s)>>1; i++ {
+		if s[i] != s[len(s)-1-i] {
+			return false
+		}
+	}
+	return true
+}
+
+// Split String
+func splitStr(s []byte) [][]string {
+	res := make([][]string, 0)
+
+	if len(s) == 0 {
+		return res
+	}
+	if len(s) == 1 {
+		return append(res, []string{string(s)})
+	}
+	if len(s) == 2 {
+		res = append(res, []string{string(s)})
+		return append(res, []string{string(s[0]), string(s[1])})
+	}
+
+	s1 := splitStr(s[1:])
+	for i, _ := range s1 {
+		s1[i] = append(s1[i], string(s[0]))
+	}
+	res = append(res, s1...)
+
+	s2 := splitStr(s[2:])
+	for i, _ := range s2 {
+		s2[i] = append(s2[i], string(s[:2]))
+	}
+	res = append(res, s2...)
+
+	return res
+}
+
+// Word Break III
+func wordBrk3(dict []string, st string) int {
+	if len(st) == 0 {
+		return 0
+	}
+
+	di := make(map[string]byte)
+	for _, w := range dict {
+		di[w] = 1
+	}
+
+	return _wb(di, st)
+}
+
+func _wb(di map[string]byte, st string) int {
+
+	if len(st) == 0 {
+		return 1
+	}
+
+	res := 0
+
+	for i, _ := range st {
+		_, ok := di[string(st[:i+1])]
+		if ok {
+			res += _wb(di, st[i+1:])
+		}
+	}
+
+	return res
+}
+
+// Sliding Window Unique Elements Sum
+func swues(ns []int, ws int) int {
+	if len(ns) < ws {
+		return 0
+	}
+
+	wc := make(map[int]int)
+	for i := 0; i < ws; i++ {
+		_, ok := wc[ns[i]]
+		switch ok {
+		case true:
+			wc[ns[i]]++
+		case false:
+			wc[ns[i]] = 1
+		}
+	}
+
+	nu := 0
+	for _, c := range wc {
+		if c == 1 {
+			nu++
+		}
+	}
+
+	res := nu
+
+	for i := ws; i < len(ns); i++ {
+		if ns[i] != ns[i-ws] {
+			wc[ns[i-ws]]--
+			if wc[ns[i-ws]] == 0 {
+				nu--
+			} else if wc[ns[i-ws]] == 1 {
+				nu++
+			}
+
+			wc[ns[i]]++
+			if wc[ns[i]] == 1 {
+				nu++
+			} else if wc[ns[i]] == 2 {
+				nu--
+			}
+		}
+		res += nu
+	}
+
+	return res
+}
+
+// Trim a Binary Search Tree
+func trimBST(rt *bstNode, min, max uint16) *bstNode {
+	if rt == nil {
+		return nil
+	}
+
+	switch {
+	case rt.v < min:
+		return trimBST(rt.right, min, max)
+	case rt.v > max:
+		return trimBST(rt.left, min, max)
+	default:
+		rt.left = trimBST(rt.left, min, max)
+		rt.right = trimBST(rt.right, min, max)
+		return rt
+	}
+}
+
+func printBST(rt *bstNode) {
+	if rt == nil {
+		return
+	}
+
+	buff := []*bstNode{rt}
+
+	for len(buff) != 0 {
+		nbuf := make([]*bstNode, 0)
+		for _, v := range buff {
+			fmt.Printf("%v\t", v.v)
+			if v.left != nil {
+				nbuf = append(nbuf, v.left)
+			}
+			if v.right != nil {
+				nbuf = append(nbuf, v.right)
+			}
+		}
+		buff = nbuf
+		fmt.Println()
+	}
+}
+
+//Cutting a Rod
+func cutRod(vs []uint, l uint) uint {
+	maxv := make([]uint, l+1)
+
+	for cur := uint(1) ; cur <= l; cur++ {
+		max := uint(0)
+		for i := uint(0); i < cur; i++ {
+			if vs[i] + maxv[cur - i - 1] > max {
+				max = vs[i] + maxv[cur-i -1]
+			}
+		}
+		maxv[cur] = max
+	}
+	return maxv[l]
+}
+
+// Minimum Partition
+func minPart(ns []int) int {
+	sum, min := 0, 0x7fffffff
+	for _, v := range ns {sum += v}
+
+	nbs := uint(len(ns))
+
+	for i := 1; i < (1 << nbs); i++ {
+		cs := 0
+		for j:= uint(0); j < nbs; j++ {
+			if i & (1 << j) != 0 {
+				cs += ns[j]
+			}
+		}
+
+		if min > absolute((cs<<1) - sum) {
+			min = absolute((cs<<1) - sum)
+		}
+	}
+
+	return min
+}
+
+func absolute(a int) int {
+	if a < 0 {
+		return -a
+	}
+	return a
 }
