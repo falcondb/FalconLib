@@ -1067,3 +1067,74 @@ func testMaxScore(h []int, w int, e int, t *testing.T) {
 		return
 	}
 }
+
+
+func TestLengthOfLongestSubstring(t *testing.T) {
+	testLengthOfLongestSubstring("abcabcbb", 3, t)
+	testLengthOfLongestSubstring("bbbbb",1, t)
+	testLengthOfLongestSubstring("pwwkew", 3, t)
+}
+
+func testLengthOfLongestSubstring(s string, e int, t *testing.T) {
+	res := lengthOfLongestSubstring(s)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		fmt.Printf("Input: %v\n", s)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+func TestDistanceK(t *testing.T) {
+	testDistanceK(&TreeNode{0,
+		&TreeNode{1, &TreeNode{2, &TreeNode{4, nil, nil}, nil}, nil},
+		&TreeNode{3, nil,nil}},
+		1, 0, t)
+
+	testDistanceK(
+		&TreeNode{3,
+		&TreeNode{5,
+			&TreeNode{6, nil, nil},
+			&TreeNode{2,
+				&TreeNode{7, nil, nil},
+				&TreeNode{4, nil, nil},
+			},
+		},
+		&TreeNode{1,
+			&TreeNode{0, nil, nil},
+			&TreeNode{8, nil, nil},
+			},
+		}, 5, 2, t)
+
+	testDistanceK(&TreeNode{0,nil,&TreeNode{1, nil,
+		&TreeNode{2,nil,&TreeNode{3, nil,
+			&TreeNode{4, nil, nil}}}}},2, 2, t)
+
+	testDistanceK(&TreeNode{0,
+		&TreeNode{2, nil, nil},
+		&TreeNode{1, &TreeNode{3, nil,nil}, nil}},
+		3, 3, t)
+}
+
+func testDistanceK(r *TreeNode, tg, k int, t *testing.T) {
+	res := distanceK(r, &TreeNode{tg, nil, nil}, k)
+	fmt.Printf("Res: %v\t", res)
+}
+
+
+
+func TestZigZagConvert(t *testing.T) {
+	testZigZagConvert("PAYPALISHIRING","PAHNAPLSIIGYIR", 3,  t)
+	testZigZagConvert("PAYPALISHIRING", "PINALSIGYAHRPI", 4, t)
+
+}
+
+func testZigZagConvert(s, e string, l int, t *testing.T) {
+	res := convert(s, l)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		fmt.Printf("Input: %v\n", s)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}

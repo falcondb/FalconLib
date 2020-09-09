@@ -2523,10 +2523,10 @@ func isNStraightHand0(hand []int, W int) bool {
 			switch hand[i] {
 			case nc:
 				nc++
-				hand[i] = 0x10000000
+				hand[i] = -0x80000000
 				cc++
 			case nc - 1:
-			case 0x10000000:
+			case -0x80000000:
 			default:
 				return false
 			}
@@ -2539,7 +2539,7 @@ func isNStraightHand0(hand []int, W int) bool {
 		}
 
 		p := st
-		for ; p < len(hand) && hand[p] == 0x10000000; p++ {}
+		for ; p < len(hand) && hand[p] == -0x80000000; p++ {}
 		st = p
 	}
 
@@ -2548,7 +2548,7 @@ func isNStraightHand0(hand []int, W int) bool {
 	}
 
 	for _, h := range hand {
-		if h != 0x10000000 {
+		if h != -0x80000000 {
 			return false
 		}
 	}
@@ -2661,4 +2661,154 @@ func maxScore(cp []int, k int) int {
 	}
 
 	return max
+}
+
+
+
+/**
+3. Longest Substring Without Repeating Characters
+Given a string s, find the length of the longest substring without repeating characters.
+Example 1:
+Input: s = "abcabcbb"
+Output: 3
+ */
+
+func lengthOfLongestSubstring(st string) int {
+
+	if len(st) == 0 { return 0}
+	cc := make([]bool, 26)
+	max := -0x80000000
+	s, e, w := 0, 0, 0
+	lst := lowercase([]byte(st))
+
+	for ; e < len(lst); e++ {
+
+		if cc[lst[e] - 'a'] {
+			for i:= s; i < e; i++ {
+				w--
+				if lst[i] != lst[e] {
+					cc[lst[i]- 'a'] = false
+				} else {
+					s = i+1
+					break
+				}
+			}
+		}
+
+		cc[lst[e]- 'a'] = true
+		w++
+		if w > max { max = w }
+	}
+
+	return max
+}
+
+func lowercase(st []byte) []byte {
+	res := make([]byte, 0)
+	for _, v := range st {
+		if v >= 'a' && v <= 'z' {
+			res = append(res, v)
+		} else if v >='A' && v <= 'Z' {
+			res = append(res, byte(v - 'A' + 'a'))
+		}
+	}
+	return res
+}
+
+
+/**
+863. All Nodes Distance K in Binary Tree
+We are given a binary tree (with root node root), a target node, and an integer value K.
+Return a list of the values of all nodes that have a distance K from the target node.
+ */
+
+type TreeNode struct {
+    Val int
+    Left *TreeNode
+    Right *TreeNode
+}
+
+func distanceK(root *TreeNode, target *TreeNode, K int) []int {
+	res := make([]int, 0)
+	_distanceK(root, target, K, &res)
+	return res
+}
+
+func _distanceK(r *TreeNode, target *TreeNode, K int, ns *[]int) []int {
+	if r == nil {
+		return nil
+	}
+
+	res := make([]int,0)
+	if r.Val == target.Val {
+		dKsubtree(r, K, ns)
+		res = append(res, 0)
+	}
+
+	ld := _distanceK(r.Left, target, K, ns)
+	for _, v := range ld {
+		if v + 1 == K {
+			*ns = append(*ns, r.Val)
+		} else {
+			nd := K - v - 2
+			dKsubtree(r.Right, nd, ns)
+			res = append(res, v+1)
+		}
+	}
+
+	rd := _distanceK(r.Right, target, K, ns)
+	for _, v := range rd {
+		if v + 1 == K {
+			*ns = append(*ns, r.Val)
+		} else {
+			nd := K - v - 2
+			dKsubtree(r.Left, nd, ns)
+			res = append(res, v+1)
+		}
+	}
+
+	return res
+}
+
+func dKsubtree(r *TreeNode, K int, ns *[]int)  {
+	if r == nil { return }
+	if K == 0 {
+		*ns = append(*ns, r.Val)
+		return
+	}
+
+	dKsubtree(r.Left, K-1, ns)
+	dKsubtree(r.Right, K-1, ns)
+}
+
+/**
+6. ZigZag Conversion
+The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+
+P   A   H   N
+A P L S I I G
+Y   I   R
+And then read line by line: "PAHNAPLSIIGYIR"
+ */
+
+func convert(s string, nr int) string {
+	if len(s) == 0 || nr <= 0 { return ""}
+	if nr == 1 {return s}
+
+	op := make([][]byte, nr)
+
+	for i, v := range []byte(s) {
+		rd := i % (nr << 1 - 2)
+		if rd >= nr {
+			op[nr << 1 - rd - 2] = append(op[nr << 1 - rd -2], v)
+		} else {
+			op[rd] = append(op[rd], v)
+		}
+	}
+	res := make([]byte, 0)
+	for _, s := range op {
+		res = append(res, s...)
+	}
+
+	return string(res)
 }
