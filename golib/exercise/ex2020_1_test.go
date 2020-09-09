@@ -129,21 +129,22 @@ func testClosest(ds1 []int, ds2 []int,  exp int, t *testing.T) {
 
 func TestCalcString(t *testing.T) {
 
-	testCalcString([]byte{2, '+', 3}, 5, t)
+	testCalcString([]byte("2+3"), 5, t)
 
-	testCalcString([]byte{2, '+', 3, '+', 2}, 7, t)
-	testCalcString([]byte{2, '+', 3, '*', 2}, 8, t)
-	testCalcString([]byte{2, '*', 3, '+', 2}, 8, t)
-	testCalcString([]byte{2, '*', 3, '*', 2}, 12, t)
+	testCalcString([]byte("2+3+2"), 7, t)
+	testCalcString([]byte("2+3*2"), 8, t)
+	testCalcString([]byte("2*3+2"), 8, t)
+	testCalcString([]byte("2*3*2"), 12, t)
 
-	testCalcString([]byte{2, '*', 3, '*', 2, '+', 5}, 17, t)
-	testCalcString([]byte{2, '+', 3, '*', 2, '+', 5}, 13, t)
-	testCalcString([]byte{2, '+', 3, '*', 2, '+', 5, '*', 2}, 18, t)
+	testCalcString([]byte("2*3*2+5"), 17, t)
+	testCalcString([]byte("2+3*2+5"), 13, t)
+	testCalcString([]byte("2+3*2+5*2"), 18, t)
 }
 
 func testCalcString(fm []byte, exp int, t *testing.T) {
 	if calcString(fm) != exp {
-		fmt.Println(fm)
+		fmt.Println(string(fm))
+
 		t.Fail()
 	}
 }

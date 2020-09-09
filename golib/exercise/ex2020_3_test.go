@@ -51,6 +51,15 @@ func assertSlicesEqual(res, exp []uint16) bool {
 	return true
 }
 
+func assertIntSlicesEqual(res, exp []int) bool {
+	for i, v := range res {
+		if v != exp[i] {
+			return false
+		}
+	}
+	return true
+}
+
 func TestGetMilestoneDays(t *testing.T) {
 	testGetMilestoneDays([]int{10, 20, 30, 40, 50, 60, 70, 80, 90, 100}, []int{100, 200, 500}, []int{4, 6, 10}, t)
 }
@@ -589,15 +598,12 @@ func testMaxPali(s string, e uint, t *testing.T) {
 	}
 }
 
-
-
-
 func TestOnesAndZeors(t *testing.T) {
 	testOnesAndZeors([]string{"10", "0001", "111001", "1", "0"}, 5, 3, 4, t)
 	testOnesAndZeors([]string{"10", "0001", "111001", "1", "0"}, 7, 7, 5, t)
 }
 
-func testOnesAndZeors(ss []string, os, zs int,  e uint, t *testing.T) {
+func testOnesAndZeors(ss []string, os, zs int, e uint, t *testing.T) {
 	r := onesAndZeors(ss, os, zs)
 	if e != r {
 		fmt.Printf("input: %v\t%v\t\n", ss, r)
@@ -606,19 +612,16 @@ func testOnesAndZeors(ss []string, os, zs int,  e uint, t *testing.T) {
 	}
 }
 
-
-
-
 func TestCoinChange(t *testing.T) {
-	testCoinChange([]int{1, 2, 5}, 11, 3,  t)
+	testCoinChange([]int{1, 2, 5}, 11, 3, t)
 	testCoinChange([]int{2}, 3, -1, t)
 
 	testCoinChange([]int{1, 2, 5, 10}, 18, 4, t)
-	testCoinChange([]int{ 2, 5, 10}, 58, 9, t)
+	testCoinChange([]int{2, 5, 10}, 58, 9, t)
 	testCoinChange([]int{1, 2, 5, 10}, 58, 8, t)
 }
 
-func testCoinChange(cs []int, tg int,  e int, t *testing.T) {
+func testCoinChange(cs []int, tg int, e int, t *testing.T) {
 	r := coinChangeBuf(cs, tg)
 	if e != r {
 		fmt.Printf("input: %v\t%v\t\n", cs, r)
@@ -629,27 +632,27 @@ func testCoinChange(cs []int, tg int,  e int, t *testing.T) {
 
 func TestNumIslands(t *testing.T) {
 
-	g := bigIsl{[][]byte{[]byte {1,1,0,0,0},[]byte {0,1,0,0,1},[]byte {0,0,0,1,1},[]byte {0,0,0,0,0},[]byte{0,0,0,0,1}}, 2, 0}
+	g := bigIsl{[][]byte{[]byte{1, 1, 0, 0, 0}, []byte{0, 1, 0, 0, 1}, []byte{0, 0, 0, 1, 1}, []byte{0, 0, 0, 0, 0}, []byte{0, 0, 0, 0, 1}}, 2, 0}
 	//testNumIslands( &g,2, t)
 
-	g = bigIsl{[][]byte{[]byte {1,1,0,0,0},[]byte {0,1,0,0,1},[]byte {0,0,0,1,1},[]byte {0,0,0,0,0},[]byte{0,0,0,0,1}}, 1, 0}
+	g = bigIsl{[][]byte{[]byte{1, 1, 0, 0, 0}, []byte{0, 1, 0, 0, 1}, []byte{0, 0, 0, 1, 1}, []byte{0, 0, 0, 0, 0}, []byte{0, 0, 0, 0, 1}}, 1, 0}
 	//testNumIslands( &g,3, t)
 
-	g = bigIsl{[][]byte{[]byte {1,1,0,0,0},[]byte {0,1,0,0,1},[]byte {0,0,0,1,1},[]byte {0,0,0,0,0},[]byte{0,0,0,0,1}}, 4, 0}
-	testNumIslands( &g,0, t)
+	g = bigIsl{[][]byte{[]byte{1, 1, 0, 0, 0}, []byte{0, 1, 0, 0, 1}, []byte{0, 0, 0, 1, 1}, []byte{0, 0, 0, 0, 0}, []byte{0, 0, 0, 0, 1}}, 4, 0}
+	testNumIslands(&g, 0, t)
 
-	g = bigIsl{[][]byte{[]byte {1,1,0,0,0},[]byte {0,1,0,0,1},[]byte {0,1,1,1,1},[]byte {0,0,0,0,0},[]byte{0,0,0,0,1}}, 4, 0}
-	testNumIslands( &g,1, t)
+	g = bigIsl{[][]byte{[]byte{1, 1, 0, 0, 0}, []byte{0, 1, 0, 0, 1}, []byte{0, 1, 1, 1, 1}, []byte{0, 0, 0, 0, 0}, []byte{0, 0, 0, 0, 1}}, 4, 0}
+	testNumIslands(&g, 1, t)
 
-	g = bigIsl{[][]byte{[]byte {1,1,0,0,0},[]byte {1,1,0,0,1},[]byte {0,0,0,1,1},[]byte {0,0,0,1,1},[]byte{0,0,0,1,1}}, 4, 0}
-	testNumIslands( &g,2, t)
+	g = bigIsl{[][]byte{[]byte{1, 1, 0, 0, 0}, []byte{1, 1, 0, 0, 1}, []byte{0, 0, 0, 1, 1}, []byte{0, 0, 0, 1, 1}, []byte{0, 0, 0, 1, 1}}, 4, 0}
+	testNumIslands(&g, 2, t)
 
-	g = bigIsl{[][]byte{[]byte{1,0},[]byte {0,1}}, 1, 0}
-	testNumIslands( &g,2, t)
+	g = bigIsl{[][]byte{[]byte{1, 0}, []byte{0, 1}}, 1, 0}
+	testNumIslands(&g, 2, t)
 
 }
 
-func testNumIslands(g *bigIsl,  e int, t *testing.T) {
+func testNumIslands(g *bigIsl, e int, t *testing.T) {
 	g.calc()
 	if e != g.iss {
 		fmt.Printf("input: %v\t%v\t\n", g.iss, e)
@@ -658,10 +661,9 @@ func testNumIslands(g *bigIsl,  e int, t *testing.T) {
 	}
 }
 
-
 func TestShoestPalindrome(t *testing.T) {
 	testShoestPalindrome([]byte("aacecaaa"), 1, t)
-	testShoestPalindrome([]byte("dcbabcd"), 0,t)
+	testShoestPalindrome([]byte("dcbabcd"), 0, t)
 	testShoestPalindrome([]byte("abcd"), 3, t)
 }
 
@@ -674,10 +676,9 @@ func testShoestPalindrome(s []byte, e int, t *testing.T) {
 	}
 }
 
-
 func TestSplitStr(t *testing.T) {
-	testSplitStr([]byte("123"),  t)
-	testSplitStr([]byte("12345"),  t)
+	testSplitStr([]byte("123"), t)
+	testSplitStr([]byte("12345"), t)
 }
 
 func testSplitStr(s []byte, t *testing.T) {
@@ -691,12 +692,10 @@ func testSplitStr(s []byte, t *testing.T) {
 	fmt.Printf("-------------\n")
 }
 
-
-
 func TestWordBrk3(t *testing.T) {
-	testWordBrk3([]string{"Cat", "Mat", "Ca", "tM", "at", "C", "Dog", "og", "Do"}, "CatMat", 3,  t)
-	testWordBrk3([]string{"Cat", "Mat", "Ca", "tM", "at", "C", "Dog", "og", "Do"}, "CatDo", 2,  t)
-	testWordBrk3([]string{}, "a", 0,  t)
+	testWordBrk3([]string{"Cat", "Mat", "Ca", "tM", "at", "C", "Dog", "og", "Do"}, "CatMat", 3, t)
+	testWordBrk3([]string{"Cat", "Mat", "Ca", "tM", "at", "C", "Dog", "og", "Do"}, "CatDo", 2, t)
+	testWordBrk3([]string{}, "a", 0, t)
 }
 
 func testWordBrk3(dict []string, s string, e int, t *testing.T) {
@@ -708,9 +707,8 @@ func testWordBrk3(dict []string, s string, e int, t *testing.T) {
 	}
 }
 
-
 func TestSwues(t *testing.T) {
-	testSwues([]int{1, 2, 1, 3, 3}, 3, 5,  t)
+	testSwues([]int{1, 2, 1, 3, 3}, 3, 5, t)
 	testSwues([]int{1, 2, 1, 2, 1}, 3, 3, t)
 	testSwues([]int{1, 2, 1, 1, 1}, 3, 2, t)
 	testSwues([]int{1, 2, 1, 1, 1}, 2, 4, t)
@@ -727,8 +725,8 @@ func testSwues(ns []int, ws, e int, t *testing.T) {
 
 func TestTrimBST(t *testing.T) {
 	testTrimBST(&bstNode{8, &bstNode{3, &bstNode{1, nil, nil},
-		&bstNode{6, &bstNode{4, nil, nil}, &bstNode{7, nil,nil}}},
-		&bstNode{10, nil, &bstNode{14, &bstNode{13, nil, nil},nil} }},
+		&bstNode{6, &bstNode{4, nil, nil}, &bstNode{7, nil, nil}}},
+		&bstNode{10, nil, &bstNode{14, &bstNode{13, nil, nil}, nil}}},
 		5, 13, t)
 }
 
@@ -737,10 +735,8 @@ func testTrimBST(r *bstNode, min, max uint16, t *testing.T) {
 	printBST(res)
 }
 
-
-
 func TestCutRod(t *testing.T) {
-	testCutRod([]uint{1, 5, 8, 9, 10, 17, 17, 20}, 8, 22,  t)
+	testCutRod([]uint{1, 5, 8, 9, 10, 17, 17, 20}, 8, 22, t)
 	testCutRod([]uint{3, 5, 8, 9, 10, 17, 17, 20}, 8, 24, t)
 
 }
@@ -754,9 +750,8 @@ func testCutRod(ns []uint, ws, e uint, t *testing.T) {
 	}
 }
 
-
 func TestMinPart(t *testing.T) {
-	testMinPart([]int{1, 6, 11, 5}, 1,  t)
+	testMinPart([]int{1, 6, 11, 5}, 1, t)
 	testMinPart([]int{1, 2, 3, 4}, 0, t)
 
 }
@@ -765,6 +760,309 @@ func testMinPart(ns []int, e int, t *testing.T) {
 	res := minPart(ns)
 	if e != res {
 		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+func TestBstRightView(t *testing.T) {
+	testBstRightView(&bstNode{1, &bstNode{2, nil, &bstNode{5, nil, nil}}, &bstNode{3, nil, &bstNode{4, nil, nil}}}, []uint16{1, 3, 4}, t)
+	testBstRightView(&bstNode{1, &bstNode{2, nil, nil}, &bstNode{3, nil, nil}}, []uint16{1, 3}, t)
+}
+
+func testBstRightView(rt *bstNode, e []uint16, t *testing.T) {
+	res := bstRightView(rt)
+	for i, v := range res {
+		if e[i] != v {
+			fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+			t.Errorf("Test name is %s, ", t.Name())
+			return
+		}
+	}
+}
+
+
+func TestMinMeetingRooms(t *testing.T) {
+	testMinMeetingRooms([][]int{[]int{0, 30}, []int{5, 10},[]int{15, 20}}, 2,t)
+	testMinMeetingRooms([][]int{[]int{7,10},[]int{2,4}}, 1, t)
+}
+
+func testMinMeetingRooms(ms [][]int, e int, t *testing.T) {
+	res := minMeetingRooms(ms)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+func TestLadderLength(t *testing.T) {
+	testLadderLength("hit","cog", []string{"hot","dot","dog","lot","log","cog"}, 5,t)
+	testLadderLength("hit","cog", []string{"hot","dot","dog","lot","log"}, 5,t)
+}
+
+func testLadderLength(bs, es string, ws []string, e int, t *testing.T) {
+	res := ladderLength(bs, es, ws)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestDecodeString(t *testing.T) {
+	testDecodeString("3[a]2[bc]", "aaabcbc",t)
+	testDecodeString("3[a2[c]]", "accaccacc", t)
+	testDecodeString("2[abc]3[cd]ef", "abcabccdcdcdef", t)
+	testDecodeString("abc3[cd]xyz", "abccdcdcdxyz", t)
+	testDecodeString("3[a]2[b4[F]c]", "aaabFFFFcbFFFFc", t)
+}
+
+func testDecodeString(s, e string, t *testing.T) {
+	res := decodeStringIt(s)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+
+	//bs := decodeString([]byte(s))
+	//if e != string(bs) {
+	//	fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+	//	t.Errorf("Test name is %s, ", t.Name())
+	//	return
+	//}
+
+}
+
+func TestMinWindow(t *testing.T) {
+	testMinWindow("abcdebdde", "bde", "bcde", t)
+	testMinWindow("abcdebdde", "bde", "bcde", t)
+}
+
+func testMinWindow(a, b, e string, t *testing.T) {
+	res := minWindow(a, b)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestLongestSubarray(t *testing.T) {
+	testLongestSubarray([]int{8,2,4,7}, 4, 2, t)
+	testLongestSubarray([]int{10,1,2,4,7,2}, 5, 4, t)
+	testLongestSubarray([]int{4,2,2,2,4,4,2,2}, 0, 3, t)
+}
+
+func testLongestSubarray(ns []int, l, e int, t *testing.T) {
+	res := longestSubarray(ns, l)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+//asteroidCollision
+func TestAsteroidCollision(t *testing.T) {
+	testAsteroidCollision([]int{5, 10, -5}, []int{5,10}, t)
+	testAsteroidCollision([]int{-2,-2,1,-2}, []int{-2,-2,-2}, t)
+	testAsteroidCollision([]int{10, 2, -5}, []int{10}, t)
+}
+
+func testAsteroidCollision(ns, e []int, t *testing.T) {
+	res := asteroidCollision(ns)
+	if !assertIntSlicesEqual(res, e) {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestTimeMap(t *testing.T) {
+	//tm := Constructor()
+	//tm.Set("foo","bar",1)
+	//e := tm.Get("foo", 1)
+	//fmt.Printf("Res:%v\n", e)
+	//e = tm.Get("foo", 3)
+	//fmt.Printf("Res:%v\n", e)
+	//tm.Set("foo","bar2",4)
+	//e = tm.Get("foo", 4)
+	//fmt.Printf("Res:%v\n", e)
+	//e = tm.Get("foo", 5)
+	//fmt.Printf("Res:%v\n", e)
+
+
+	tm := Constructor()
+	//["love","high",10],["love","low",20],["love",5],["love",10],["love",15],["love",20],["love",25]]
+	tm.Set("love","high",10)
+	tm.Set("love","low",20)
+	e := tm.Get("love", 5)
+	fmt.Printf("Res:%v\n", e)
+	e = tm.Get("love", 10)
+	fmt.Printf("Res:%v\n", e)
+	e = tm.Get("love", 15)
+	fmt.Printf("Res:%v\n", e)
+	e = tm.Get("love", 20)
+	fmt.Printf("Res:%v\n", e)
+	e = tm.Get("love", 25)
+	fmt.Printf("Res:%v\n", e)
+}
+
+func TestNumMatrix(t *testing.T) {
+	nm := NumMatrixConstructor([][]int{[]int{3,0,1,4,2}, []int{5,6,3,2,1}, []int{1,2,0,1,5}, []int{4,1,0,1,7},
+		[]int{1,0,3,0,5}})
+	fmt.Printf("Res:%v\n", nm.SumRegion(2,1,4,3))
+	fmt.Printf("Res:%v\n", nm.SumRegion(1,1,2,2))
+	fmt.Printf("Res:%v\n", nm.SumRegion(1,2,2,4))
+}
+
+
+
+func TestRandomPick(t *testing.T) {
+	rp := RPIConstructor([]int{1,2,3,3,3})
+
+	for i:=0; i < 10; i++ {
+		fmt.Printf("Res:%v\n", rp.Pick(3))
+	}
+
+	fmt.Printf("Res:%v\n", rp.Pick(1))
+	fmt.Printf("Res:%v\n", rp.Pick(2))
+	fmt.Printf("Res:%v\n", rp.Pick(4))
+}
+
+//[[],[2,4,6],[1,4,8,9],[7,8],[1,2,8,9],[6,9],[1,5,7,8,9],[3,6,9],[2,3,4,6,9],[2,4,5,6,7,8]]
+func TestIsBipartite(t *testing.T) {
+	testIsBipartite([][]int{[]int{},[]int{2,4,6},[]int{1,4,8,9},[]int{7,8},[]int{1,2,8,9},[]int{6,9},[]int{1,5,7,8,9},[]int{3,6,9},[]int{2,3,4,6,9},[]int{2,4,5,6,7,8}}, false, t)
+
+}
+
+func testIsBipartite(ns [][]int, e bool, t *testing.T) {
+	res := isBipartite(ns)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+//sortList(head *ListNode)
+func TestSortList(t *testing.T) {
+	//4->2->1->3
+	h := sortList(&ListNode{4, &ListNode{2, &ListNode{1, &ListNode{3, nil}}}})
+	for n := h; n != nil; n=n.Next{fmt.Printf("%v\n", n.Val)}
+
+	//-1->5->3->4->0
+	h = sortList(&ListNode{-1, &ListNode{5, &ListNode{3, &ListNode{4, &ListNode{0,nil}}}}})
+	for n := h; n != nil; n=n.Next{fmt.Printf("%v\n", n.Val)}
+}
+
+
+//groupAnagrams
+func TestGroupAnagrams(t *testing.T) {
+	res := groupAnagrams([]string{"eat","tea","tan","ate","nat","bat"})
+
+	for _, ss := range res {
+		for _, s := range ss {
+			fmt.Printf("%s, ", s)
+		}
+		fmt.Printf("\n")
+	}
+}
+
+
+func TestPartitionLabels(t *testing.T) {
+	testPartitionLabels("ababcbacadefegdehijhklij", []int{9,7,8}, t)
+}
+
+func testPartitionLabels(s string, e []int, t *testing.T) {
+	res := partitionLabels(s)
+	for i, v := range res {
+		if e[i] != v {
+			fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+			t.Errorf("Test name is %s, ", t.Name())
+			return
+		}
+	}
+}
+
+
+func TestMostCommonWord(t *testing.T) {
+	testMostCommonWord("Bob hit a ball, the hit BALL flew far after it was hit.", []string{"hit"}, "ball", t)
+}
+
+func testMostCommonWord(s string, b []string, e string, t *testing.T) {
+	res := mostCommonWord(s, b)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestValidateStackSequences(t *testing.T) {
+	testValidateStackSequences([]int{1,2,3,4,5}, []int{4,5,3,2,1}, true, t)
+}
+
+func testValidateStackSequences(ps, pp []int, e bool, t *testing.T) {
+	res := validateStackSequences(ps, pp)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+func TestExpressiveWords(t *testing.T) {
+	testExpressiveWords("heeellooo", []string{"hello", "hi", "helo"}, 1, t)
+
+	testExpressiveWords("zzzzzyyyyy", []string{"zzyy","zy","zyy"}, 3, t)
+
+	testExpressiveWords("heeellooo", []string{"heeelloooworld"}, 0, t)
+}
+
+func testExpressiveWords(S string, ws []string, e int, t *testing.T) {
+	res := expressiveWords(S, ws)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestIsNStraightHand(t *testing.T) {
+	testIsNStraightHand([]int{1, 2, 3, 6, 2, 3, 4, 7, 8}, 3, true, t)
+	testIsNStraightHand([]int{1, 1, 2, 2, 3, 3}, 2, false, t)
+}
+
+func testIsNStraightHand(h []int, w int, e bool, t *testing.T) {
+	res := isNStraightHand(h, w)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		fmt.Printf("Input: %v\n", h)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestMaxScore(t *testing.T) {
+	testMaxScore([]int{1,2,3,4,5,6,1}, 3, 12, t)
+	testMaxScore([]int{2,2,2}, 2, 4, t)
+	testMaxScore([]int{9,7,7,9,7,7,9}, 7, 55, t)
+}
+
+func testMaxScore(h []int, w int, e int, t *testing.T) {
+	res := maxScore(h, w)
+	if e != res {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		fmt.Printf("Input: %v\n", h)
 		t.Errorf("Test name is %s, ", t.Name())
 		return
 	}

@@ -158,7 +158,7 @@ func closest(ds1 []int, ds2 []int) (int, error) {
 	return md, nil
 }
 
-func calcString(fm []byte) int {
+func calcString2(fm []byte) int {
 	if fm == nil || len(fm) == 0 {
 		return 0
 	}
@@ -197,6 +197,81 @@ func calcString(fm []byte) int {
 	}
 	return res
 }
+
+
+func calcString(fm []byte) int {
+	if fm == nil || len(fm) == 0 {
+		return 0
+	}
+
+	if len(fm) == 1 {
+		return int(fm[0])
+	}
+
+	stk := 0
+
+	v, l, f := getNum(fm)
+
+	if f {
+		stk = v
+		fm = fm[l:]
+	}
+
+	res := 0
+	for add, f := getSign(fm); f; add, f = getSign(fm) {
+		fm = fm[1:]
+		v, l , f = getNum(fm)
+		if add && f {
+				res += stk
+				stk = v
+				fm = fm[l:]
+		} else if f {
+			stk = stk * v
+			fm = fm[l:]
+		} else {
+			break
+		}
+
+	}
+
+	return res + stk
+}
+
+func getSign(st []byte) (bool, bool) {
+	if st == nil || len(st) == 0 {
+		return true, false
+	}
+
+	switch  st[0] {
+	case '+':
+		return true, true
+	case '*':
+		return false, true
+	default:
+		return true, false
+	}
+
+}
+
+func getNum(st []byte) (int, int, bool) {
+	if st == nil || len(st) == 0 || st[0] < '0' || st[0] > '9' {
+		return 0xffff, 0, false
+	}
+
+	value := 0
+	l := 0
+	for _, v := range st {
+		if v < '0' || v > '9' {
+			break
+		} else {
+			l++
+			value = value * 10 + int(v - '0')
+		}
+	}
+
+	return value, l, true
+}
+
 
 type dLinkedNode struct {
 	K, V       int
@@ -435,6 +510,46 @@ func minPartition(nums []int) int {
 
 type interval struct {
 	st, end int
+}
+
+type intervals []interval
+
+func (is intervals) Len() int {
+	return len(is)
+}
+
+func (is intervals) Less(i, j int) bool {
+	return is[i].st < is[j].st
+}
+
+func (is intervals) Swap(i, j int) {
+	is[i], is[j] = is[j], is[i]
+}
+
+type intervalheap []interval
+
+func (h intervalheap) Len() int {
+	return len(h)
+}
+
+func (h intervalheap) Less(i, j int) bool {
+	return h[i].end < h[j].end
+}
+
+func (h intervalheap) Swap(i, j int) {
+	h[i], h[j] = h[j], h[i]
+}
+
+func (h *intervalheap) Push(x interface{}) {
+	*h = append(*h, x.(interval))
+}
+
+func (h *intervalheap) Pop() interface{} {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
 }
 
 func mergeIntervalArrays(a1 []interval, a2 []interval) []interval {
