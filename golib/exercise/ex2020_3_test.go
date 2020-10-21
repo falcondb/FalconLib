@@ -1138,3 +1138,44 @@ func testZigZagConvert(s, e string, l int, t *testing.T) {
 		return
 	}
 }
+
+
+func TestMinAvailableDuration(t *testing.T) {
+	testMinAvailableDuration([][]int{[]int{0,2}}, [][]int{[]int{1, 3}}, 1, []int{1, 2}, t)
+	testMinAvailableDuration([][]int{[]int{0,1},[]int{100,1000100}}, [][]int{[]int{90,1000100},[]int{0,2}}, 1000000, []int{100,1000100}, t)
+	testMinAvailableDuration([][]int{[]int{216397070,363167701}, []int{98730764,158208909}, []int{441003187,466254040}, []int{558239978,678368334}, []int{683942980,717766451}},
+		[][]int{[]int{50490609,222653186}, []int{512711631,670791418}, []int{730229023,802410205}, []int{812553104,891266775}, []int{230032010,399152578}}, 456085, []int{98730764,99186849}, t)
+}
+
+func testMinAvailableDuration(a, b [][]int, d int, e []int, t *testing.T) {
+	res := minAvailableDuration(a, b, d)
+	if e[0] != res[0] || e[1] != res[1] {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		fmt.Printf("Input: %v%v\n", a, b)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+func TestMultiply(t *testing.T) {
+	testMultiply([][]int{[]int{1,0,0}, []int{-1,0,3}},[][]int{[]int{7,0,0}, []int{0,0,0}, []int{0,0,1}}, [][]int{[]int{7,0,0}, []int{-7,0,3}},  t)
+
+}
+
+func testMultiply(a, b [][]int, e [][]int, t *testing.T) {
+	res := multiply(a, b)
+	if len(res) != len(e) {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		fmt.Printf("Input: %v\n", a)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+	for i, _ := range res {
+		if !assertIntSlicesEqual(res[i], e[i]) {
+			fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+			fmt.Printf("Input: %v\n", a)
+			t.Errorf("Test name is %s, ", t.Name())
+			return
+		}
+	}
+}

@@ -2812,3 +2812,199 @@ func convert(s string, nr int) string {
 
 	return string(res)
 }
+
+
+/**
+284. Peeking Iterator
+*/
+
+type Iterator struct {
+}
+func (it *Iterator) hasNext() bool {return true}
+
+func (it *Iterator) next() int {return 0}
+
+type PeekingIterator struct {
+	it *Iterator
+	peeked bool
+	pValue int
+}
+
+
+func PeekingIteratorConstructor(iter *Iterator) *PeekingIterator {
+	return &PeekingIterator{iter, false, 0}
+}
+
+func (it *PeekingIterator) hasNext() bool {
+	if it.peeked {
+		return true
+	} else if it.it.hasNext() {
+		it.peeked = true
+		it.pValue = it.it.next()
+		return true
+	} else {
+		return false
+	}
+}
+
+func (pit *PeekingIterator) next() int {
+
+	if pit.peeked {
+		pit.peeked = false
+		return pit.pValue
+	} else if pit.it.hasNext() {
+		pit.peeked = false
+		return pit.it.next()
+	} else {
+		return -0xfffffff
+	}
+}
+
+func (pit *PeekingIterator) peek() int {
+	if pit.peeked {
+		return pit.pValue
+	} else if pit.it.hasNext() {
+		pit.peeked = true
+		pit.pValue = pit.it.next()
+		return pit.pValue
+	} else {
+		return -0xfffffff
+	}
+}
+
+
+/**
+1229. Meeting Scheduler
+ */
+func minAvailableDuration(a, b [][]int, d int) []int {
+	ai, bi := 0, 0
+	sort.Sort(sl(a))
+	sort.Sort(sl(b))
+	for ai < len(a) && bi <len(b) {
+		s, p := slotsOverlap(a[ai], b[bi])
+		if p >= d {
+			return []int{s, s + d}
+		}
+
+		if a[ai][0] < b[bi][0] || a[ai][0] == b[bi][0] && a[ai][1] < b[bi][1] {
+			ai++
+		} else {
+			bi++
+		}
+	}
+
+	return []int{}
+}
+
+type sl [][]int
+
+// Len is the number of elements in the collection.
+func (a sl) Len() int { return len(a) }
+func (a sl) Less(i, j int) bool {return a[i][0] < a[j][0]}
+func (a sl) Swap(i, j int) {a[i], a[j] = a[j], a[i]}
+
+func slotsOverlap(a, b []int) (int, int) {
+	if a[0] > b[0] {
+		a, b = b, a
+	}
+
+	switch {
+		case a[1] < b[0]:
+			return 0, 0
+		case a[1] <= b[1]:
+			return b[0], a[1] - b[0]
+		default:
+			return b[0], b[1] - b[0]
+	}
+}
+
+
+/**
+311. Sparse Matrix Multiplication
+ */
+
+func multiply(A [][]int, B [][]int) [][]int {
+	if A == nil || B == nil || len(A) == 0 || len(B) == 0 || len(A[0]) == 0 || len(A[0]) != len(B) {
+		return nil
+	}
+	res := make([][]int, len(A))
+	for i, _ := range A {
+		res[i] = make([]int, len(B[0]))
+	}
+
+	nz := make([][]int, len(B[0]))
+	for i, _ := range B {
+		for j, vv := range B[i] {
+			if vv != 0 {
+				nz[j] = append(nz[j], i)
+			}
+		}
+	}
+
+	for i, _ := range A {
+		aiz := make([]int, 0)
+		for j, v := range A[i] {
+			if v != 0 {
+				aiz = append(aiz, j)
+			}
+		}
+		for j, _ := range B[0] {
+			for ai, bi := 0, 0; ai < len(aiz) && bi < len(nz[j]); {
+				switch {
+				case aiz[ai] == nz[j][bi]:
+					res[i][j] += A[i][aiz[ai]] * B[nz[j][bi]][j]
+					ai++
+					bi++
+				case aiz[ai] < nz[j][bi]:
+					ai++
+				default:
+					bi++
+				}
+			}
+		}
+	}
+	return res
+}
+
+
+/**
+2. Add Two Numbers in linked lists
+ */
+func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+	switch {
+	case l1 == nil:
+		return l2
+	case l2 == nil:
+		return l1
+	}
+
+	fk := &ListNode{0, nil}
+	cur := fk
+	ca := 0
+
+	for h1, h2 := l1, l2; h1 != nil || h2 != nil; {
+		sum := 0
+		switch {
+		case h1 == nil:
+			sum = h2.Val
+			h2 = h2.Next
+		case h2 == nil:
+			sum = h1.Val
+			h1 = h1.Next
+		default:
+			sum = h1.Val + h2.Val
+			h1, h2 = h1.Next, h2.Next
+		}
+
+		sum += ca
+		cur.Next = &ListNode{(sum) % 10, nil }
+		ca = (sum) / 10
+		cur = cur.Next
+	}
+
+	if ca != 0 {
+		cur.Next = &ListNode{1, nil }
+	}
+
+	return fk.Next
+}
