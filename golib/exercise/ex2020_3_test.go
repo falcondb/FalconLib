@@ -1179,3 +1179,53 @@ func testMultiply(a, b [][]int, e [][]int, t *testing.T) {
 		}
 	}
 }
+
+
+func TestNumOfMinutes(t *testing.T) {
+	testNumOfMinutes(10,3, []int{8,9,8,-1,7,1,2,0,3,0}, []int{224,943,160,909,0,0,0,643,867,722}, 3665, t)
+}
+
+func testNumOfMinutes(n, h int, m, it []int, e int, t *testing.T) {
+	res := numOfMinutes(n,h, m, it)
+	if res != e {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		fmt.Printf("Input: %v%v\n", m, it)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+
+func TestFindReplaceString (t *testing.T) {
+	testFindReplaceString("vmokgggqzp", []int{3,5,1}, []string{"kg","ggq","mo"}, []string{"s","so","bfr"}, "vbfrssozp", t)
+	testFindReplaceString("vmokgggqzp", []int{1, 3,5}, []string{"mo","kg","ggq","mo"}, []string{"bfr", "s","so"}, "vbfrssozp", t)
+}
+
+func testFindReplaceString (s string, ind []int, src, tag []string, e string, t *testing.T) {
+
+	res := findReplaceString(s, ind, src, tag)
+	if res != e {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		fmt.Printf("Input: %v%v\n", s, ind)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestMinSumOfLengths (t *testing.T) {
+	//testMinSumOfLengths([]int{2,2,4,4,4,4,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}, 20, 23, t)
+	testMinSumOfLengths([]int{3,2,2,4,3}, 3, 2, t)
+}
+
+func testMinSumOfLengths (d []int, s int, e int, t *testing.T) {
+
+	res := minSumOfLengths(d, s)
+	if res != e {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		fmt.Printf("Input: %v%v\n", s, d)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}

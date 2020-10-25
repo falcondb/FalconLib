@@ -3008,3 +3008,182 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 
 	return fk.Next
 }
+
+
+/**
+1376. Time Needed to Inform All Employees
+A company has n employees with a unique ID for each employee from 0 to n - 1. The head of the company has is the one with headID.
+Each employee has one direct manager given in the manager array where manager[i] is the direct manager of the i-th employee, manager[headID] = -1. Also it's guaranteed that the subordination relationships have a tree structure.
+The head of the company wants to inform all the employees of the company of an urgent piece of news. He will inform his direct subordinates and they will inform their subordinates and so on until all employees know about the urgent news.
+The i-th employee needs informTime[i] minutes to inform all of his direct subordinates (i.e After informTime[i] minutes, all his direct subordinates can start spreading the news).
+Example:
+Input: n = 6, headID = 2, manager = [2,2,-1,2,2,2], informTime = [0,0,1,0,0,0]
+Output: 1
+Explanation: The head of the company with id = 2 is the direct manager of all the employees in the company and needs 1 minute to inform them all.
+The tree structure of the employees in the company is shown.
+ */
+
+func numOfMinutes(n int, headID int, manager []int, informTime []int) int {
+
+	rct := make([]int, n)
+	rt := make([]int, n) // report time
+	cr := make([]int, 0) // current lowest level
+
+	for _, m := range manager {
+		if m >= 0 {
+			rct[m]++
+		}
+	}
+
+	for i, v := range rct {
+		if v == 0 {
+			cr = append(cr, i)
+		}
+	}
+
+	for len(cr) != 0 {
+		ncr := make([]int, 0)
+		for _, v := range cr {
+				m := manager[v]
+				if m < 0 {
+					continue
+				}
+				if rt[m] < rt[v]+informTime[m] {
+					rt[m] = rt[v] + informTime[m]
+				}
+				rct[m]--
+				if rct[m] == 0 {
+					ncr = append(ncr, m)
+				}
+			}
+		cr = ncr
+	}
+
+	return  rt[headID]
+}
+
+
+/**
+833. Find And Replace in String
+To some string S, we will perform some replacement operations that replace groups of letters with new ones (not necessarily the same size).
+Each replacement operation has 3 parameters: a starting index i, a source word x and a target word y.  The rule is that if x starts at position i in the original string S, then we will replace that occurrence of x with y.  If not, we do nothing.
+For example, if we have S = "abcd" and we have some replacement operation i = 2, x = "cd", y = "ffff", then because "cd" starts at position 2 in the original string S, we will replace it with "ffff".
+Using another example on S = "abcd", if we have both the replacement operation i = 0, x = "ab", y = "eee", as well as another replacement operation i = 2, x = "ec", y = "ffff", this second operation does nothing because in the original string S[2] = 'c', which doesn't match x[0] = 'e'.
+All these operations occur simultaneously.  It's guaranteed that there won't be any overlap in replacement: for example, S = "abc", indexes = [0, 1], sources = ["ab","bc"] is not a valid test case.
+
+Input: S = "abcd", indexes = [0, 2], sources = ["ab","ec"], targets = ["eee","ffff"]
+Output: "eeecd"
+ */
+
+type frs struct {
+	ind int
+	src, tg string
+}
+
+type ps []frs
+
+func (d ps) Less(i, j int) bool { return d[i].ind < d[j].ind}
+func (d ps) Len() int {return len(d)}
+func (d ps) Swap(i,j int) {d[i].ind, d[i].src, d[i].tg, d[j].ind, d[j].src, d[j].tg =
+	d[j].ind, d[j].src, d[j].tg, d[i].ind, d[i].src, d[i].tg}
+func findReplaceString(S string, ind []int, src []string, tg []string) string {
+	res := make([]byte, 0)
+	h := 0
+	p := make([]frs, 0)
+
+	for i, v := range ind {
+		p = append(p, frs{v, src[i], tg[i]})
+	}
+	sort.Sort(ps(p))
+	for _, idx := range p {
+		if S[idx.ind : idx.ind + len(idx.src)] == idx.src {
+			res = append(res, S[h: idx.ind]...)
+			res = append(res, idx.tg...)
+			h = idx.ind + len(idx.src)
+		}
+	}
+	res = append(res, S[h:]...)
+	return string(res)
+}
+
+
+/**
+1477. Find Two Non-overlapping Sub-arrays Each With Target Sum
+Given an array of integers arr and an integer target.
+You have to find two non-overlapping sub-arrays of arr each with sum equal target. There can be multiple answers so you have to find an answer where the sum of the lengths of the two sub-arrays is minimum.
+ */
+func minSumOfLengths(arr []int, target int) int {
+
+	its := matchIntervals(arr, target)
+	sort.Sort(msitvs(its))
+
+	minSum := 0xffffffff
+
+	for i, _ := range its {
+		for j:= i; j < len(its); j++ {
+			if !( its[i].st == its[j].st || its[i].end == its[j].end ||
+				its[i].st < its[j].st && its[i].end >= its[j].st ||
+				its[j].st < its[i].st && its[j].end >= its[i].st ) {
+				if its[i].end - its[i].st + its[j].end - its[j].st < minSum {
+					minSum = its[i].end - its[i].st + its[j].end - its[j].st
+				}
+			}
+		}
+	}
+
+	if minSum == 0xffffffff {
+		return -1
+	}
+	minSum += 2
+	return minSum
+}
+
+type msitv struct {
+	st, end int
+}
+
+type msitvs []msitv
+
+func (is msitvs) Len() int {
+	return len(is)
+}
+
+func (is msitvs) Less(i, j int) bool {
+	return is[i].end - is[i].st  < is[j].end - is[j].st
+}
+
+func (is msitvs) Swap(i, j int) {
+	is[i], is[j] = is[j], is[i]
+}
+
+func matchIntervals(a []int, t int) []msitv {
+	if a == nil {
+		return nil
+	}
+
+	res := make([]msitv, 0)
+
+	as := make([]int, len(a))
+
+	as[0] = a[0]
+	if a[0] == t {
+		res = append(res, msitv{0, 0})
+	}
+	for i:=1; i < len(a); i++ {
+		as[i] = as[i-1] + a[i]
+		if as[i] == t {
+			res = append(res, msitv{0, i})
+		}
+	}
+
+	for e:=len(a)-1; e > 0; e-- {
+		for s:=e-1; s>=0; s-- {
+			if as[e] - as[s] == t {
+				res = append(res, msitv{s+1,e})
+			}
+		}
+	}
+
+	return res
+}
+

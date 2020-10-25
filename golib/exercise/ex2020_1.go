@@ -519,7 +519,14 @@ func (is intervals) Len() int {
 }
 
 func (is intervals) Less(i, j int) bool {
-	return is[i].st < is[j].st
+	switch {
+	case is[i].st < is[j].st:
+		return true
+	case is[i].st == is[j].st:
+		return is[i].end < is[j].end
+	default:
+		return false
+	}
 }
 
 func (is intervals) Swap(i, j int) {
