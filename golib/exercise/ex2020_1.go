@@ -423,7 +423,7 @@ func TopKFreWords(wds []string, k int) ([]string, error) {
 	for _, w := range wds {
 		c, ok := wfc[w]
 		if !ok {
-			wfc[w] = 1
+		wfc[w] = 1
 		} else {
 			wfc[w] = c + 1
 		}

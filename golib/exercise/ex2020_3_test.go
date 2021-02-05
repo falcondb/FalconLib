@@ -785,6 +785,8 @@ func testBstRightView(rt *bstNode, e []uint16, t *testing.T) {
 func TestMinMeetingRooms(t *testing.T) {
 	testMinMeetingRooms([][]int{[]int{0, 30}, []int{5, 10},[]int{15, 20}}, 2,t)
 	testMinMeetingRooms([][]int{[]int{7,10},[]int{2,4}}, 1, t)
+
+	testMinMeetingRooms([][]int{[]int{9,10},[]int{4,9},[]int{4,17}}, 2, t)
 }
 
 func testMinMeetingRooms(ms [][]int, e int, t *testing.T) {
@@ -1215,7 +1217,7 @@ func testFindReplaceString (s string, ind []int, src, tag []string, e string, t 
 
 
 func TestMinSumOfLengths (t *testing.T) {
-	//testMinSumOfLengths([]int{2,2,4,4,4,4,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}, 20, 23, t)
+	testMinSumOfLengths([]int{2,2,4,4,4,4,4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}, 20, 23, t)
 	testMinSumOfLengths([]int{3,2,2,4,3}, 3, 2, t)
 }
 
@@ -1229,3 +1231,223 @@ func testMinSumOfLengths (d []int, s int, e int, t *testing.T) {
 		return
 	}
 }
+
+
+func TestLongestIncreasingPath (t *testing.T) {
+	testLongestIncreasingPath([][]int{[]int{9,9,4}, []int{6,6,8}, []int{2,1,1}}, 4, t)
+	testLongestIncreasingPath([][]int{[]int{1,2}}, 2, t)
+	testLongestIncreasingPath([][]int{[]int{0}, []int{1}, []int{5}, []int{5}}, 3, t)
+}
+
+func testLongestIncreasingPath (d [][]int, e int, t *testing.T) {
+
+	res := longestIncreasingPath(d)
+	if res != e {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		fmt.Printf("Input: %v\n",  d)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+
+func TestMissingElement (t *testing.T) {
+	testLongestIncreasingPath([][]int{[]int{9,9,4}, []int{6,6,8}, []int{2,1,1}}, 4, t)
+	testLongestIncreasingPath([][]int{[]int{1,2}}, 2, t)
+	testMissingElement([]int{1,2,4}, 3,6, t)
+}
+
+func testMissingElement (d []int, g,e int, t *testing.T) {
+
+	res := missingElement(d, g)
+	if res != e {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		fmt.Printf("Input: %v\n",  d)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+
+func TestAlphabetBoardPath (t *testing.T) {
+	testAlphabetBoardPath("leet",  t)
+}
+
+func testAlphabetBoardPath (s string, t *testing.T) {
+
+	res := alphabetBoardPath(s)
+	fmt.Printf("Res: %v\t\n", res)
+		return
+
+}
+
+func TestRLEIterator (t *testing.T) {
+	rl := RLEConstructor([]int{3,8,0,9,2,5})
+	fmt.Printf("Res: %v\t%v\t%v\t%v\t\n", rl.Next(2), rl.Next(1), rl.Next(1), rl.Next(2))
+}
+
+
+func TestGetHint (t *testing.T) {
+	testGetHint("1807", "7810", "1A3B", t)
+	testGetHint("1122", "2211", "0A4B", t)
+}
+
+func testGetHint (s,g,e string, t *testing.T) {
+	res := getHint(s, g)
+	if res != e {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+func TestSnapshotArray (t *testing.T) {
+	sa := SAConstructor(2)
+	sa.Snap()
+	sa.Get(1,0)
+	sa.Get(0,0)
+	sa.Set(1,8)
+	fmt.Printf("Res: %v\t\n", sa.Get(1,0))
+	sa.Set(0,20)
+	fmt.Printf("Res: %v\t\n", sa.Get(0,0))
+}
+
+
+func TestMaxSubArray (t *testing.T) {
+	testMaxSubArray([]int{-2,1,-3,4,-1,2,1,-5,4}, 6,  t)
+
+}
+
+func testMaxSubArray (n []int , e int , t *testing.T) {
+	res := maxSubArray(n)
+	if res != e {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+func TestConcordance (t *testing.T) {
+	generateAndPrintConcordance([]string{"Wait a minute. Wait a minute, Doc.", "Are you telling me that you built a time machine out of a DeLorean?"})
+}
+
+
+func TestIsRobotBounded (t *testing.T) {
+	testIsRobotBounded("GGLLGG",true,  t)
+
+}
+
+func testIsRobotBounded (ins string , e bool , t *testing.T) {
+	res := isRobotBounded(ins)
+	if res != e {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+
+
+func TestDailyTemperatures (t *testing.T) {
+	//testDailyTemperatures([]int{55,38,53,81,61,93,97,32,43,78},[]int{3,1,1,2,1,1,0,1,1,0},  t)
+
+	testDailyTemperatures([]int{89,62,70,58,47,47,46,76,100,70},[]int{8,1,5,4,3,2,1,1,0,0},  t)
+}
+
+func testDailyTemperatures (tt []int , e []int , t *testing.T) {
+	res := dailyTemperatures(tt)
+	if !assertIntSlicesEqual(res, e) {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+
+
+func TestFirstUniqChar (t *testing.T) {
+	testFirstUniqChar("leetcode",0,  t)
+
+}
+
+func testFirstUniqChar (ins string , e int , t *testing.T) {
+	res := firstUniqChar(ins)
+	if res != e {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+
+func TestFindMaxLength (t *testing.T) {
+	testFindMaxLength([]int{0,1,0},2,  t)
+
+}
+
+func testFindMaxLength (ns []int , e int , t *testing.T) {
+	res := findMaxLength(ns)
+	if res != e {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+
+
+
+
+func TestExclusiveTime (t *testing.T) {
+	//testExclusiveTime([]string{2,"0:start:0","1:start:2","1:end:5","0:end:6"},[]int{3,4},  t)
+	// testExclusiveTime(1,[]string{ "0:start:0","0:start:2","0:end:5","0:start:6","0:end:6","0:end:7"}, []int{8}, t)
+
+	testExclusiveTime(2, []string{"0:start:0","0:start:2","0:end:5","1:start:6","1:end:6","0:end:7"}, []int{7,1}, t)
+}
+
+func testExclusiveTime (s int, ns []string , e []int , t *testing.T) {
+	res := exclusiveTime(s, ns)
+	if !assertIntSlicesEqual(res, e) {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}
+
+func TestAppInt (t *testing.T) {
+	appInt()
+}
+
+
+func TestHitCounter (t *testing.T) {
+	hc := HCConstructor()
+	hc.Hit(1)
+	hc.Hit(2)
+	hc.Hit(3)
+
+	res := hc.GetHits(4)
+	if res != 3 {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, 3)
+		return
+	}
+
+	hc.Hit(300)
+	res = hc.GetHits(300)
+	if res != 4 {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, 4)
+		return
+	}
+
+	res = hc.GetHits(301)
+	if res != 3 {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, 3)
+		return
+	}
+}
+

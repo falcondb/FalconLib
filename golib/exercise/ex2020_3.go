@@ -836,11 +836,6 @@ func btLCS(r *bstNode) (uint, uint) {
 		}
 	}
 
-
-
-
-
-
 	if r.right != nil {
 		if r.right.v == r.v+1 || r.right.v+1 == r.v {
 			ram, rdm = btLCS(r.right)
@@ -1634,7 +1629,7 @@ Input: [[0, 30],[5, 10],[15, 20]]
 Output: 2
  */
 
-func minMeetingRooms(ints [][]int) int {
+func minMeetingRooms2(ints [][]int) int {
 
 	if ints == nil || len(ints) == 0 {
 		return 0
@@ -3186,4 +3181,5 @@ func matchIntervals(a []int, t int) []msitv {
 
 	return res
 }
+
 
