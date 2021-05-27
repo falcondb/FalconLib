@@ -43,6 +43,9 @@ func testCountSubarrays(a []int, exp []uint16, t *testing.T) {
 }
 
 func assertSlicesEqual(res, exp []uint16) bool {
+	if len(res) != len(exp) {
+		return false
+	}
 	for i, v := range res {
 		if v != exp[i] {
 			return false
@@ -52,6 +55,9 @@ func assertSlicesEqual(res, exp []uint16) bool {
 }
 
 func assertIntSlicesEqual(res, exp []int) bool {
+	if len(res) != len(exp) {
+		return false
+	}
 	for i, v := range res {
 		if v != exp[i] {
 			return false
@@ -633,10 +639,10 @@ func testCoinChange(cs []int, tg int, e int, t *testing.T) {
 func TestNumIslands(t *testing.T) {
 
 	g := bigIsl{[][]byte{[]byte{1, 1, 0, 0, 0}, []byte{0, 1, 0, 0, 1}, []byte{0, 0, 0, 1, 1}, []byte{0, 0, 0, 0, 0}, []byte{0, 0, 0, 0, 1}}, 2, 0}
-	//testNumIslands( &g,2, t)
+	testNumIslands( &g,2, t)
 
 	g = bigIsl{[][]byte{[]byte{1, 1, 0, 0, 0}, []byte{0, 1, 0, 0, 1}, []byte{0, 0, 0, 1, 1}, []byte{0, 0, 0, 0, 0}, []byte{0, 0, 0, 0, 1}}, 1, 0}
-	//testNumIslands( &g,3, t)
+	testNumIslands( &g,3, t)
 
 	g = bigIsl{[][]byte{[]byte{1, 1, 0, 0, 0}, []byte{0, 1, 0, 0, 1}, []byte{0, 0, 0, 1, 1}, []byte{0, 0, 0, 0, 0}, []byte{0, 0, 0, 0, 1}}, 4, 0}
 	testNumIslands(&g, 0, t)
@@ -886,33 +892,33 @@ func testAsteroidCollision(ns, e []int, t *testing.T) {
 
 
 func TestTimeMap(t *testing.T) {
-	//tm := Constructor()
-	//tm.Set("foo","bar",1)
-	//e := tm.Get("foo", 1)
-	//fmt.Printf("Res:%v\n", e)
-	//e = tm.Get("foo", 3)
-	//fmt.Printf("Res:%v\n", e)
-	//tm.Set("foo","bar2",4)
-	//e = tm.Get("foo", 4)
-	//fmt.Printf("Res:%v\n", e)
-	//e = tm.Get("foo", 5)
-	//fmt.Printf("Res:%v\n", e)
-
-
 	tm := Constructor()
-	//["love","high",10],["love","low",20],["love",5],["love",10],["love",15],["love",20],["love",25]]
-	tm.Set("love","high",10)
-	tm.Set("love","low",20)
-	e := tm.Get("love", 5)
+	tm.Set("foo","bar",1)
+	e := tm.Get("foo", 1)
 	fmt.Printf("Res:%v\n", e)
-	e = tm.Get("love", 10)
+	e = tm.Get("foo", 3)
 	fmt.Printf("Res:%v\n", e)
-	e = tm.Get("love", 15)
+	tm.Set("foo","bar2",4)
+	e = tm.Get("foo", 4)
 	fmt.Printf("Res:%v\n", e)
-	e = tm.Get("love", 20)
+	e = tm.Get("foo", 5)
 	fmt.Printf("Res:%v\n", e)
-	e = tm.Get("love", 25)
-	fmt.Printf("Res:%v\n", e)
+
+
+	//tm := Constructor()
+	////["love","high",10],["love","low",20],["love",5],["love",10],["love",15],["love",20],["love",25]]
+	//tm.Set("love","high",10)
+	//tm.Set("love","low",20)
+	//e := tm.Get("love", 5)
+	//fmt.Printf("Res:%v\n", e)
+	//e = tm.Get("love", 10)
+	//fmt.Printf("Res:%v\n", e)
+	//e = tm.Get("love", 15)
+	//fmt.Printf("Res:%v\n", e)
+	//e = tm.Get("love", 20)
+	//fmt.Printf("Res:%v\n", e)
+	//e = tm.Get("love", 25)
+	//fmt.Printf("Res:%v\n", e)
 }
 
 func TestNumMatrix(t *testing.T) {
@@ -1451,3 +1457,15 @@ func TestHitCounter (t *testing.T) {
 	}
 }
 
+func TestFindCircleNum (t *testing.T) {
+	testFindCircleNum([][]int{[]int{1,1,0}, []int{1,1,0}, []int{0,0,1}}, 2,  t)
+}
+
+func testFindCircleNum (c [][]int , e int , t *testing.T) {
+	res := findCircleNum(c)
+	if res != e {
+		fmt.Printf("Res: %v\tExp: %v\t\n", res, e)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}

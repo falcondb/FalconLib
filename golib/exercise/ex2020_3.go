@@ -2002,13 +2002,13 @@ func (s tvs) searchES(k int) int {
 }
 
 /** Initialize your data structure here. */
-func Constructor() TimeMap {
+func TMConstructor() TimeMap {
 	tm := TimeMap{ make(map[string]tvs), false}
 	return tm
 }
 
 
-func (this *TimeMap) Set(key string, value string, timestamp int)  {
+func (this *TimeMap) Set1(key string, value string, timestamp int)  {
 	tvss, ok := this.kvm[key]
 	if !ok {
 		this.kvm[key] = tvs{timedValue{value, timestamp}}
@@ -2020,7 +2020,7 @@ func (this *TimeMap) Set(key string, value string, timestamp int)  {
 }
 
 
-func (this *TimeMap) Get(key string, timestamp int) string {
+func (this *TimeMap) Get1(key string, timestamp int) string {
 	tvss, ok := this.kvm[key]
 	if !ok {
 		return ""
@@ -2302,7 +2302,7 @@ Explanation:
 The partition is "ababcbaca", "defegde", "hijhklij".
  */
 
-func partitionLabels(S string) []int {
+func partitionLabels2(S string) []int {
 	if len(S) == 0 {return []int{}}
 
 	res := make([]int, 0)

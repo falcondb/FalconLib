@@ -104,3 +104,17 @@ func testRotateImage(in, exp [][]uint, t *testing.T) {
 		}
 	}
 }
+
+
+func TestNumIslands2(t *testing.T) {
+	testNumIslands2([][]byte{[]byte{1, 1, 1, 1, 0}, []byte{1, 1, 0, 1, 0}, []byte{1, 1, 0, 0, 0}, []byte{0,0,0,0,0}}, 1, t)
+}
+
+func testNumIslands2(in [][]byte, exp int, t  *testing.T){
+	res := numIslands(in)
+	if exp != res {
+		fmt.Printf("Res:%v\t Exp:%v\n", res, exp)
+		t.Errorf("Test name is %s, ", t.Name())
+		return
+	}
+}

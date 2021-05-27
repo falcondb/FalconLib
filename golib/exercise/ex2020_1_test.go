@@ -386,3 +386,56 @@ func testFlatListOrInt(li *listOrInt, exp []int, t *testing.T) {
 		}
 	}
 }
+
+func TestNumDecodings(t *testing.T) {
+	//testNumDecodings("2101", 1, t)
+	testNumDecodings("10", 1, t)
+}
+
+func testNumDecodings(s string, exp int, t *testing.T) {
+	res := numDecodings(s)
+	if res != exp {
+		fmt.Printf("exp:%v, result:%v\n", exp, res)
+		t.Errorf("Test name is %s, ", t.Name())
+	}
+}
+
+
+func TestMinRemoveToMakeValid(t *testing.T) {
+
+	testMinRemoveToMakeValid("a)b(c)d", "ab(c)d", t)
+}
+
+func testMinRemoveToMakeValid(s string, exp string, t *testing.T) {
+	res := minRemoveToMakeValid(s)
+	if res != exp {
+		fmt.Printf("exp:%v, result:%v\n", exp, res)
+		t.Errorf("Test name is %s, ", t.Name())
+	}
+}
+
+func TestSubarraySum(t *testing.T) {
+
+	testSubarraySum([]int{1,1,1}, 2, 2, t)
+}
+
+func testSubarraySum(s []int, k, exp int, t *testing.T) {
+	res := subarraySum(s, k)
+	if res != exp {
+		fmt.Printf("exp:%v, result:%v\n", exp, res)
+		t.Errorf("Test name is %s, ", t.Name())
+	}
+}
+
+func TestCountPairs(t *testing.T) {
+
+	testCountPairs([]int{1048576,1048576}, 1, t)
+}
+
+func testCountPairs(s []int, exp int, t *testing.T) {
+	res := countPairs(s)
+	if res != exp {
+		fmt.Printf("exp:%v, result:%v\n", exp, res)
+		t.Errorf("Test name is %s, ", t.Name())
+	}
+}

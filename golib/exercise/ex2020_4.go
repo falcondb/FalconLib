@@ -1197,7 +1197,6 @@ func minMeetingRooms(intervals [][]int) int {
 	h := &mth{}
 	for _, m := range intervals {
 		for ; h.Len() != 0 && h.Peek().([]int)[1] <= m[0];  {
-			fmt.Println(h.Peek().([]int))
 			heap.Pop(h)
 		}
 		heap.Push(h, m)
@@ -1304,3 +1303,82 @@ func (hc *HitCounter) GetHits(ts int) int {
  */
 
 
+/**
+547. Number of Provinces
+ */
+func findCircleNum(con [][]int) int {
+	if con == nil {
+		return 0
+	}
+	vt := make([]bool, len(con))
+	cands := make([]int, 0)
+	res := 0
+
+	for i:=0; i<len(con); i++ {
+		if vt[i] {
+			continue
+		}
+		res++
+
+		cands = append(cands, i)
+		for len(cands) != 0 {
+			j := cands[0]
+			vt[j] = true
+
+			for c:=0; c<len(con[0]); c++ {
+				if con[j][c] == 1 && !vt[c] {
+					cands = append(cands, c)
+				}
+			}
+
+			cands = cands[1:]
+		}
+	}
+
+	return res
+}
+
+/**
+981. Time Based Key-Value Store
+ */
+
+//type TimeMap struct {
+//	kvm map[string]tvs
+//	updated bool
+//}
+//
+//type timedValue struct {
+//	v string
+//	ts int
+//
+// }
+// type tvs []timedValue
+
+/** Initialize your data structure here. */
+func Constructor() TimeMap {
+	tm := TimeMap{ make(map[string]tvs), false}
+	return tm
+}
+
+
+func (tm *TimeMap) Set(key string, value string, timestamp int)  {
+	tvs, _ := tm.kvm[key]
+	tm.kvm[key] = append(tvs, timedValue{value, timestamp})
+}
+
+const EMPST  = ""
+func (tm *TimeMap) Get(key string, timestamp int) string {
+	tvs, ok := tm.kvm[key]
+
+	if !ok {
+		return EMPST
+	}
+
+	idx := sort.Search(len(tvs), func(i int) bool {return timestamp <= tvs[i].ts})
+
+	if idx < len(tvs) {
+		return tvs[idx].v
+	}
+
+	return EMPST
+}
