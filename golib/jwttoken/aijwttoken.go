@@ -17,6 +17,7 @@ import (
 
 const (
 	KEYFILESUFFIX = "/runtime/Tomcat-7/webapps/ROOT/WEB-INF/classes/com/adaptiveplanning/system/ticket/AuthKey.parameters.properties"
+	ADMINPATH = "/api/rest/alm/v1/default/admin/"
 )
 
 func main() {
@@ -35,6 +36,7 @@ func main() {
 
 	app.Commands = []cli.Command{
 		jtwcomms,
+		alertComms,
 	}
 
 	err := app.Run(os.Args)
@@ -113,6 +115,8 @@ var jtwcomms = cli.Command{
 	},
 }
 
+
+
 var authkeyfile, jwtkey string
 
 func checkDeps(c *cli.Context) error {
@@ -122,6 +126,10 @@ func checkDeps(c *cli.Context) error {
 		authkeyfile = "~/git/planning" + KEYFILESUFFIX
 	} else {
 		authkeyfile = planningPath + KEYFILESUFFIX
+	}
+
+	if keyPath := os.Getenv("PLANNINGKEY"); len(keyPath) != 0 {
+		authkeyfile = keyPath
 	}
 
 	if _, err := os.Stat(authkeyfile); err != nil {
@@ -165,14 +173,6 @@ func generateJWTToken(c *cli.Context) error {
 
 	issuedAt := time.Now()
 
-	//header := &jwtHeader{c.String("JWT_CONTENT_TYPE"), c.String("JWT_ALGORITHM"), issuedAt.Unix(), expiration.Unix()}
-	//payload := &jwtPayload{c.String("JWT_LOGIN"), c.String("JWT_ISSUER"), c.String("JWT_AUDIENCE"), c.String("JWT_ID"),
-	//		c.Int("JWT_MULTI_USE"), c.Int("JWT_IS_AUTH"), issuedAt.Unix(), expiration.Unix(), expiration.Unix()}
-	//header := &jwtHeader{c.String("JWT_CONTENT_TYPE"), c.String("JWT_ALGORITHM")}
-	//payload := &jwtPayload{c.String("JWT_LOGIN"), c.String("JWT_ISSUER"), c.String("JWT_AUDIENCE"),
-	//	c.String("JWT_MULTI_USE"), c.String("JWT_IS_AUTH"), 1626456263, 1626456263 + 12000000, 1626456263, c.String("JWT_ID")}
-
-
 	header := &jwtHeader{c.String("JWT_CONTENT_TYPE"), c.String("JWT_ALGORITHM")}
 	payload := &jwtPayload{c.String("JWT_LOGIN"), c.String("JWT_ISSUER"), c.String("JWT_AUDIENCE"),
 		c.String("JWT_MULTI_USE"), c.String("JWT_IS_AUTH"), issuedAt.Unix(),
@@ -215,14 +215,13 @@ func generateJWTToken(c *cli.Context) error {
 		log.Println("Payload JSON:",string(pljson))
 		log.Println("Base64 header & Payload:",b64)
 		log.Println("Token:", b64)
+	} else {
+		log.Println(b64)
 	}
 
-	log.Println("JWT Token:\n", b64)
 
 	return nil
 }
-
-
 
 type jwtHeader struct {
 	Cty  string `json:"cty"`
