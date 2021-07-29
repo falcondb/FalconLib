@@ -18,6 +18,8 @@ import (
 const (
 	KEYFILESUFFIX = "/runtime/Tomcat-7/webapps/ROOT/WEB-INF/classes/com/adaptiveplanning/system/ticket/AuthKey.parameters.properties"
 	ADMINPATH = "/api/rest/alm/v1/default/admin/"
+	ALERTPATH = "alerts/"
+	MOTDPATH = "motd/"
 )
 
 func main() {
@@ -216,7 +218,7 @@ func generateJWTToken(c *cli.Context) error {
 		log.Println("Base64 header & Payload:",b64)
 		log.Println("Token:", b64)
 	} else {
-		log.Println(b64)
+		fmt.Print(b64)
 	}
 
 

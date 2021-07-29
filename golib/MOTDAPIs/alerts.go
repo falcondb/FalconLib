@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"github.com/urfave/cli"
@@ -16,7 +17,7 @@ var alertComms = cli.Command{
 	Description: "alert rest calls",
 	Flags: []cli.Flag{
 		cli.StringFlag{
-			Name:  "connection, cn",
+			Name:  "CONNECTION, cn",
 			Usage: "connection ip and port",
 			Value: "localhost:1712",
 		},
@@ -37,8 +38,14 @@ var alertComms = cli.Command{
 			Aliases:     []string{"put", "P", "p"},
 			Usage:       "alert put",
 			Description: "alert put calls",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "BODY, b",
+					Usage: "HTTP body",
+				},
+			},
 			Action: func(c *cli.Context) error {
-				return generateJWTToken(c)
+				return alertPut(c)
 			},
 		},
 
@@ -48,25 +55,47 @@ var alertComms = cli.Command{
 			Usage:       "alert delete",
 			Description: "alert delete calls",
 			Action: func(c *cli.Context) error {
-				return generateJWTToken(c)
+				return alertDelete(c)
 			},
 		},
 	},
 }
 
 func alertGet(c *cli.Context) error {
+	return httpCall(c, http.MethodGet, "")
+}
+
+func alertPut(c *cli.Context) error {
+
+	if body := c.String("BODY"); len(body) != 0 {
+		return httpCall(c, http.MethodPut, body)
+	} else {
+		return errors.New("the BODY flag is not set probably")
+	}
+}
+
+func alertDelete(c *cli.Context) error {
+	return httpCall(c, http.MethodDelete, "")
+}
+
+func httpCall(c *cli.Context, action, body string) error {
 	token := os.Getenv("AIJWTTOKEN")
 	if len(token) == 0 {
 		return errors.New("the JWT Token is not set at environment variable AIJWTTOKEN")
 	}
 
-	url := "https://" + c.String("connection") + ADMINPATH
-	req, err := http.NewRequest("GET", url, nil)
+	serverRoot := c.Parent().String("CONNECTION")
+	if len(serverRoot) == 0 {
+		return errors.New("the CONNECTION flag is not set probably")
+	}
+	url := "https://" + serverRoot + ADMINPATH + ALERTPATH
+	req, err := http.NewRequest(action, url, bytes.NewBuffer([]byte(body)))
 	if err != nil {
-
+		return errors.New("creating HTTP Request failed")
 	}
 
-	req.Header.Add("Authorization", token)
+	req.Header.Add("Accept","application/json")
+	req.Header.Add("Authorization", "Bearer " + token)
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -76,8 +105,9 @@ func alertGet(c *cli.Context) error {
 
 	fmt.Println("response Status:", resp.Status)
 	fmt.Println("response Headers:", resp.Header)
-	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("response Body:", string(body))
+	respBody, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println("response Body:", string(respBody))
 
 	return nil
 }
+
