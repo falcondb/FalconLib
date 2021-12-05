@@ -782,7 +782,7 @@ Input: words = ["xbc","pcxbcf","xb","cxbc","pcxbc"]
 
 
 
-func longestStrChain(words []string) int {
+func longestStrChain2(words []string) int {
 	sort.Sort(wa(words))
 
 	cands := make([]ws, 0)
@@ -835,7 +835,9 @@ type ws struct {
 	lps uint
 }
 
-
+/**
+Has a bug!
+ */
 func ispredecessor(s, pc string) bool {
 	if len(s) + 1 != len(pc) {
 		return false

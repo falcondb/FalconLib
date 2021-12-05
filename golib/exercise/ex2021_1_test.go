@@ -85,20 +85,20 @@ func testCheckSubarraySum(r []int, k int, exp bool, t *testing.T) {
 }
 
 
-func TestTreeToDoublyList(t *testing.T) {
+//func TestTreeToDoublyList(t *testing.T) {
+//
+//	testTreeToDoublyList(&Node{4, &Node{2, &Node{1, nil,nil}, &Node{3, nil,nil}},
+//		&Node{5, nil, nil}}, t)
+//}
 
-	testTreeToDoublyList(&Node{4, &Node{2, &Node{1, nil,nil}, &Node{3, nil,nil}},
-		&Node{5, nil, nil}}, t)
-}
-
-func testTreeToDoublyList(r *Node, t *testing.T) {
-	res := treeToDoublyList(r)
-	fmt.Printf(" %v", res.Val)
-	for cur := res.Right; cur != res; cur = cur.Right {
-		fmt.Printf(" %v", cur.Val)
-	}
-
-}
+//func testTreeToDoublyList(r *Node, t *testing.T) {
+//	res := treeToDoublyList(r)
+//	fmt.Printf(" %v", res.Val)
+//	for cur := res.Right; cur != res; cur = cur.Right {
+//		fmt.Printf(" %v", cur.Val)
+//	}
+//
+//}
 
 
 func TestRightSideView(t *testing.T) {
@@ -370,3 +370,184 @@ func testCanTransform(l,r string, exp bool, t *testing.T) {
 	}
 }
 
+
+
+func TestScoreOfParentheses(t *testing.T) {
+	testScoreOfParentheses("(())()",	3, t)
+	testScoreOfParentheses("(())",	2, t)
+	testScoreOfParentheses("()",	1, t)
+
+}
+
+func testScoreOfParentheses(l string, exp int, t *testing.T) {
+	res := scoreOfParentheses( l)
+	if res != exp {
+		fmt.Printf("Res: %v\t Exp:%v\n", res, exp)
+		t.Errorf("Test name is %s, ", t.Name())
+	}
+}
+
+
+func TestOoddEvenList(t *testing.T) {
+	testOoddEvenList(&ListNode{1, &ListNode{2, &ListNode{3, &ListNode{4, &ListNode{5,nil}}}}}, t)
+
+}
+
+func testOoddEvenList(l *ListNode, t *testing.T) {
+	res := oddEvenList(l)
+	for ; res != nil; res = res.Next {
+		fmt.Println(res.Val)
+	}
+}
+
+
+func TestCopyRandomList(t *testing.T) {
+	n4 := &RDNode{1, nil, nil}
+	n3 := &RDNode{10, n4, nil}
+	n2 := &RDNode{11, n3, nil}
+	n1 := &RDNode{13, n2, nil}
+	n0 := &RDNode{7, n1, nil}
+
+	n1.Random = n0
+	n2.Random = n4
+	n3.Random = n2
+	n4.Random = n0
+
+	testCopyRandomList(n0, t)
+
+}
+
+func testCopyRandomList(l *RDNode, t *testing.T) {
+	res := copyRandomList(l)
+	for ; res != nil; res = res.Next {
+		fmt.Printf("\n%v ", res.Val)
+		if  res.Random != nil {
+			fmt.Printf("%v ", res.Random.Val)
+		}
+	}
+}
+
+
+func TestMinSteps(t *testing.T) {
+	b := [][]byte{ []byte("ABCE"), []byte("SFCS"), []byte("ADEE")}
+	testExist(b, "ABCCED", true, t)
+
+}
+
+func testExist(b [][]byte, s string, exp bool, t *testing.T) {
+	res := exist(b, s)
+	if  res != exp {
+		fmt.Printf("%v ", res)
+	}
+}
+
+
+func TestSpiralOrder(t *testing.T) {
+	m := [][]int{[]int{1,2,3,4}, []int{5,6,7,8}, []int{9,10,11,12}}
+	testSpiralOrder(m, t)
+
+}
+
+func testSpiralOrder(m [][]int, t *testing.T) {
+	res := spiralOrder(m)
+		fmt.Printf("%v ", res)
+}
+
+
+func TestLastStoneWeight(t *testing.T) {
+	fmt.Printf("%v ", lastStoneWeight([]int{2,7,4,1,8,1}))
+}
+
+
+
+func TestLowestCommonAncestor(t *testing.T) {
+	n4 := &TreeNode{4, nil, nil}
+	n5 := &TreeNode{5, &TreeNode{6, nil,nil}, &TreeNode{2, &TreeNode{7, nil, nil}, n4}}
+	n0 := &TreeNode{0, nil, nil}
+	n8 := &TreeNode{8, nil, nil}
+	r := &TreeNode{3, n5,
+		&TreeNode{1, n0, n8}}
+	fmt.Printf("%v ", lowestCommonAncestor(r, n0, n8).Val)
+}
+
+
+func TestMinDifference(t *testing.T) {
+	fmt.Printf("%v ", minDifference([]int{20,66,68,57,45,18,42,34,37,58}))
+}
+
+func TestNumSplits(t *testing.T) {
+	//fmt.Printf("%v ",numSplits("abcd"))
+
+	fmt.Printf("%v ",numSplits("aaaaa"))
+	//fmt.Printf("%v ",numSplits("acbadbaada"))
+}
+
+
+func TestLongestStrChain(t *testing.T) {
+	fmt.Printf("%v ", longestStrChain([]string{"abcd","dbqca"}))
+}
+
+
+func TestAsteroidCollision2(t *testing.T) {
+	fmt.Printf("%v ", asteroidCollision2([]int{5,10,-5}))
+}
+
+func TestCarFleet(t *testing.T) {
+	fmt.Printf("%v ", carFleet(10, []int{6,8}, []int{3,2}))
+}
+
+func TestCarFTestCountSquaresleet(t *testing.T) {
+	countSquares([][]int{[]int{0,1,1,1}, []int{1,1,1,1}, []int{0,1,1,1}})
+}
+
+
+func TestScinsert(t *testing.T) {
+	last := &SCNode{1, nil}
+	st := &SCNode{3, &SCNode{4, last}}
+	last.Next = st
+	scinsert(st, 2)
+}
+
+func TestSimplifyPath(t *testing.T) {
+	fmt.Printf("%v ", simplifyPath("/../"))
+}
+
+func TestSwapNodes(t *testing.T) {
+	h := &ListNode{1,  &ListNode{2,  &ListNode{3,  &ListNode{4, &ListNode{5, nil}}}}}
+	swapNodes(h, 3)
+}
+
+func TestMostCompetitive(t *testing.T) {
+	//mostCompetitive([]int{2,4,3,3,5,4,9,6}, 4)
+	mostCompetitive([]int{71,18,52,29,55,73,24,42,66,8,80,2}, 3)
+}
+
+
+func TestWordsTyping(t *testing.T) {
+	wordsTyping([]string{"a","abc"}, 1, 2000)
+}
+
+func TestLongestPalindrome(t *testing.T) {
+	longestPalindrome("babad")
+}
+func TestChange2(t *testing.T) {
+	change(5, []int{1,2,5})
+}
+
+func TestChange3(t *testing.T) {
+	minSol(10)
+}
+
+
+func TestToeplitzMatrix(t *testing.T) {
+	isToeplitzMatrix([][]int{[]int{44,35,39}, []int{15,44,35}, []int{17,15,44}, []int{80,17,15}, []int{43,80,17}, []int{77,43,80}})
+}
+
+func TestStr2tree(t *testing.T) {
+	str2tree("4(2(3)(1))(6(5))")
+}
+
+func TestRangeSumBST2(t *testing.T) {
+	rangeSumBST(&TreeNode{10, &TreeNode{5, &TreeNode{3, &TreeNode{1, nil, nil}, nil}, &TreeNode{7, &TreeNode{6, nil, nil}, nil}},
+	&TreeNode{15, &TreeNode{13,nil, nil}, &TreeNode{18, nil, nil}}}, 6, 10)
+}

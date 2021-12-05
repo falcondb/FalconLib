@@ -1,0 +1,10 @@
+TOOL=/Users/yifei.ma/opprojects/goprojects/src/github.com/falcondb/FalconLib/golib/MOTDAPIs/demo
+export PLANHOME=/Users/yifei.ma/adaptive/git/planning/
+# create a signed token using key in com/adaptiveplanning/system/ticket/AuthKey.parameters.properties
+export AIJWTTOKEN=`$TOOL create`
+echo $AIJWTTOKEN
+
+$TOOL alert get
+$TOOL alert delete
+$TOOL alert put --BODY "{ \"message\":\"Hello MOTD API \" }"
+$TOOL alert get

@@ -329,47 +329,47 @@ func checkSubarraySum(nums []int, k int) bool {
 
 	return false
 }
+//
+//type Node struct {
+//	Val int
+//	Left *Node
+//	Right *Node
+//}
 
-type Node struct {
-	Val int
-	Left *Node
-	Right *Node
-}
-
-func treeToDoublyList(root *Node) *Node {
-
-	if root == nil {
-		return nil
-	}
-
-	head, tail := treeToDoublyListHelper(root)
-	tail.Right = head
-	head.Left = tail
-	return head
-}
-
-func treeToDoublyListHelper(root *Node) (*Node, *Node) {
-	var head, tail *Node
-	if root.Left != nil {
-		head, tail = treeToDoublyListHelper(root.Left)
-		tail.Right = root
-		root.Left = tail
-		tail = root
-	} else {
-		head, tail = root, root
-	}
-
-	if root.Right != nil {
-		rhead, rtail := treeToDoublyListHelper(root.Right)
-		tail.Right = rhead
-		rhead.Left = tail
-		tail = rtail
-	} else {
-		tail.Right = nil
-	}
-
-	return head, tail
-}
+//func treeToDoublyList(root *Node) *Node {
+//
+//	if root == nil {
+//		return nil
+//	}
+//
+//	head, tail := treeToDoublyListHelper(root)
+//	tail.Right = head
+//	head.Left = tail
+//	return head
+//}
+//
+//func treeToDoublyListHelper(root *Node) (*Node, *Node) {
+//	var head, tail *Node
+//	if root.Left != nil {
+//		head, tail = treeToDoublyListHelper(root.Left)
+//		tail.Right = root
+//		root.Left = tail
+//		tail = root
+//	} else {
+//		head, tail = root, root
+//	}
+//
+//	if root.Right != nil {
+//		rhead, rtail := treeToDoublyListHelper(root.Right)
+//		tail.Right = rhead
+//		rhead.Left = tail
+//		tail = rtail
+//	} else {
+//		tail.Right = nil
+//	}
+//
+//	return head, tail
+//}
 
 /**
 199. Binary Tree Right Side View
@@ -431,17 +431,17 @@ func rightSideViewHelper(root *TreeNode, view []int, depth int) []int {
 //	return nil
 //}
 
-func lcaHelp(r *Node, t int) bool {
-	if r == nil {
-		return false
-	}
-
-	if r.Val == t {
-		return true
-	}
-
-	return lcaHelp(r.Left, t) || lcaHelp(r.Right, t)
-}
+//func lcaHelp(r *Node, t int) bool {
+//	if r == nil {
+//		return false
+//	}
+//
+//	if r.Val == t {
+//		return true
+//	}
+//
+//	return lcaHelp(r.Left, t) || lcaHelp(r.Right, t)
+//}
 
 type intHeap []int
 
@@ -456,6 +456,26 @@ func (h *intHeap) Push(x interface{}) {
 }
 
 func (h *intHeap) Pop() interface{} {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
+}
+
+type intMaxHeap []int
+
+func (h intMaxHeap) Len()int {return len(h)}
+
+func (h intMaxHeap) Less(i, j int)bool {return h[i]>h[j]}
+
+func (h intMaxHeap) Swap(i, j int) {h[i], h[j] = h[j], h[i]}
+
+func (h *intMaxHeap) Push(x interface{}) {
+	*h = append(*h, x.(int))
+}
+
+func (h *intMaxHeap) Pop() interface{} {
 	old := *h
 	n := len(old)
 	x := old[n-1]
@@ -2007,4 +2027,484 @@ func mergeInterval57(i1, i2 []int) ([]int, int) {
 		r = i2[1]
 	}
 	return []int{l, r}, 0
+}
+
+/**
+169. Majority Element
+ */
+
+func majorityElement(nums []int) int {
+	res, ft := 0, 0
+
+	for _, n := range nums {
+		if ft == 0 {
+			res = n
+			ft = 1
+		} else {
+			if n == res {
+				ft++
+			} else {
+					ft--
+			}
+		}
+	}
+
+	return res
+}
+
+/**
+856. Score of Parentheses
+ */
+
+func scoreOfParentheses(s string) int {
+	ls := make([]int, 0)
+	ln := -1
+
+	for _, c := range s {
+		if c == '(' {
+			ln++
+			if len(ls) <= ln {
+				ls = append(ls, 0)
+			}
+		} else {
+				if len(ls) > ln + 1 {
+					ls[ln] += ls[ln+1] << 1
+					ls = ls[:len(ls) - 1]
+				} else {
+					ls[ln] += 1
+				}
+				ln--
+		}
+	}
+
+	return ls[0]
+}
+
+
+func numPairsDivisibleBy602(time []int) int {
+	dc := make([]int, 60)
+
+	res := 0
+
+	for _, t := range time {
+		if t% 60 == 0 {
+			res += dc[0]
+		} else {
+			res += dc[60 - t % 60 ]
+		}
+		dc[t % 60]++
+	}
+	return res
+}
+
+/**
+328. Odd Even Linked List
+ */
+
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func oddEvenList(head *ListNode) *ListNode {
+	odd, even := ListNode{0, nil}, ListNode{0, nil}
+
+	of := true
+	on, en, cn := &odd, &even, head
+	for ; cn != nil;  {
+		if of {
+			on.Next = cn
+			on = on.Next
+		} else {
+			en.Next = cn
+			en = en.Next
+		}
+
+		cn = cn.Next
+		of = !of
+	}
+	en.Next = nil
+	on.Next = even.Next
+
+	return odd.Next
+}
+
+/**
+138. Copy List with Random Pointer
+ */
+
+/**
+* Definition for a Node.
+* type Node struct {
+*     Val int
+*     Next *Node
+*     Random *Node
+* }
+*/
+
+type RDNode struct {
+	Val int
+	Next *RDNode
+	Random *RDNode
+}
+func copyRandomList(head *RDNode) *RDNode {
+	if head == nil {
+		return nil
+	}
+
+	for c := head; c != nil; {
+		nn := &RDNode{c.Val , c.Next, nil}
+		c.Next = nn
+		c = nn.Next
+	}
+
+	for c := head; c!= nil; {
+		if  c.Random == nil {
+			c.Next.Random = nil
+		} else {
+			c.Next.Random = c.Random.Next
+		}
+		c = c.Next.Next
+	}
+
+	for c := head.Next; c.Next != nil; {
+		tmp := c.Next.Next
+		c.Next = c.Next.Next
+		c = tmp
+	}
+	return head.Next
+}
+
+/**
+1347. Minimum Number of Steps to Make Two Strings Anagram
+ */
+func minSteps(s string, t string) int {
+	wc := make([]int, 26)
+	for _, c := range s {
+		wc[c-'a']++
+	}
+	for _, c := range t {
+		wc[c-'a']--
+	}
+	res := 0
+	for _, c := range wc {
+		if c > 0 {
+			res += c
+		}
+	}
+	return res
+}
+
+/**
+155. Min Stack
+ */
+type MinStack struct {
+	st, ms []int
+}
+
+
+/** initialize your data structure here. */
+func MSConstructor() MinStack {
+	return  MinStack{make([]int, 0), make([]int, 0)}
+}
+
+
+func (this *MinStack) Push(val int)  {
+	if len(this.ms) == 0 {
+		this.st = append(this.st, val)
+		this.ms = append(this.ms, val)
+		return
+	}
+
+	if this.ms[len(this.ms) - 1] >= val {
+		this.ms = append(this.ms, val)
+	}
+	this.st = append(this.st, val)
+}
+
+func (this *MinStack) Pop()  {
+	if len(this.st) == 0 {
+		return
+	}
+
+	if this.st[len(this.st) - 1] == this.ms[len(this.ms) - 1] {
+		this.ms = this.ms[:len(this.ms) - 1]
+	}
+
+	this.st = this.st[:len(this.st) - 1]
+}
+
+func (this *MinStack) Top() int {
+	return this.st[len(this.st) - 1]
+}
+
+func (this *MinStack) GetMin() int {
+	return this.ms[len(this.ms) - 1]
+}
+
+
+
+/**
+79. Word Search
+*/
+
+var mk79 [][]bool
+func exist(board [][]byte, word string) bool {
+	mk79 = make([][]bool, len(board))
+	for i, _ := range mk79 { mk79[i] = make([]bool, len(board[0])) }
+
+	for i := 0; i < len(board); i++ {
+		for j:=0; j < len(board[0]); j++ {
+			if h79(board, i, j, word) {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func h79(b [][]byte, i, j int, w string) bool {
+	if i < 0 || j < 0 || i >= len(b) || j >= len(b[0]) || mk79[i][j] || b[i][j] != w[0] {
+		return false
+	}
+	mk79[i][j] = true
+	w = w[1:]
+	res := len(w) == 0 	|| h79(b, i - 1, j, w)	|| h79(b, i + 1, j, w) || h79(b, i, j -1, w) || h79(b, i, j+1, w)
+	mk79[i][j] = false
+	return res
+}
+
+/**
+54. Spiral Matrix
+ */
+
+func spiralOrder(matrix [][]int) []int {
+	rs, cs := 0, 0
+	wid, h := len(matrix[0]), len(matrix)
+
+	w := 0
+	if len(matrix) <= len(matrix[0]) {
+		w = len(matrix)
+	} else {
+		w = len(matrix[0])
+	}
+
+	res := make([]int,0)
+
+	for w > 1 {
+		for i:=rs; i < wid - rs; i++ {res = append(res, matrix[cs][i])}
+		for j:=cs + 1; j < h - cs; j++ {res = append(res, matrix[j][wid-rs-1])}
+		for i:= wid - rs - 2; i >= rs; i-- {res = append(res, matrix[i][h-cs-1])}
+		for j:= h-cs-2; j > cs; j-- {res = append(res, matrix[cs][j])}
+
+		cs++; rs++; w-=2
+	}
+
+	if w==0 {
+		for i:=rs; i < wid - rs; i++ {res = append(res, matrix[cs][i])}
+		for j:=cs + 1; j < h - cs; j++ {res = append(res, matrix[j][wid-rs-1])}
+	}
+
+	return res
+}
+
+/**
+76. Minimum Window Substring
+ */
+
+func minWindow76(s string, t string) string {
+	if len(s) == 0 || len(t) == 0 {
+		return ""
+	}
+
+	wc := make([]int, 52)
+	nc := 0
+	for _, c := range t {
+		id := char2index(c)
+		if wc[id] == 0 {
+			nc++
+		}
+		wc[id]++
+	}
+
+	cc := make([]int, 52)
+	j, mc := 0, 0
+	res := ""
+	for i,c := range s {
+		id := char2index(c)
+		cc[id]++
+		if cc[id] == wc[id] {
+			mc++
+		}
+
+		if mc == nc {
+			for ; j <= i; j++ {
+				id := char2index(int32(s[j]))
+				if cc[id] == wc[id] {
+					break
+				}
+				cc[id]--
+			}
+			if len(res) == 0 || len(res) > i - j + 1 {
+				res = s[j:i+1]
+			}
+			
+		}
+	}
+
+	return res
+}
+
+func char2index(b int32) int {
+	if b >= 'a' && b <= 'z' {
+		return int(b - 'a')
+	} else if b >= 'A' && b >= 'Z' {
+		return int(26 + b - 'A')
+	} else {
+		return -1
+	}
+}
+
+/**
+206. Reverse Linked List
+ */
+
+func reverseList2(head *ListNode) *ListNode {
+	fh := ListNode{0, nil}
+
+	for c := head; c != nil; {
+		tmp := fh.Next
+		fh.Next = c
+		c = c.Next
+		fh.Next.Next = tmp
+	}
+
+	return fh.Next
+}
+
+/**
+121. Best Time to Buy and Sell Stock
+ */
+
+func maxProfit(prices []int) int {
+
+	res, min := 0, prices[0]
+
+	for _, v := range prices {
+		if v < min { min = v }
+		if res < v - min { res = v - min}
+	}
+
+	return res
+}
+
+
+func twoSum(nums []int, target int) []int {
+	nm := make(map[int]int)
+	res := make([]int, 2)
+	for i, n := range nums {
+		if s, ok := nm[target-n]; ok {
+			res[0] = s; res[1] = i
+			return res
+		}
+		nm[n] = i
+	}
+	return res
+}
+
+/**
+33. Search in Rotated Sorted Array
+ */
+
+func search(nums []int, target int) int {
+	if nums == nil || len(nums) == 0 {
+		return -1
+	}
+
+	s, e := 0, len(nums) - 1
+
+	for s < e {
+		m := (s + e) >> 1
+		if nums[m] == target {
+			return m
+		}
+		if nums[s] == target {
+			return s
+		}
+		if nums[e] == target {
+			return e
+		}
+		if nums[s] < nums[m] {
+			if target > nums[s] && target < nums[m] {
+				e = m - 1
+			} else {
+				s = m + 1
+			}
+		} else {
+			if target > nums[m] && target < nums[e] {
+				s = m + 1
+			} else {
+				e = m -1
+			}
+		}
+	}
+
+	return -1
+}
+
+/**
+1046. Last Stone Weight
+ */
+
+func lastStoneWeight(stones []int) int {
+	sh := intHeap(stones)
+	heap.Init(&sh)
+	for len(sh) >= 2 {
+		sl := heap.Pop(&sh).(int)
+		ss := heap.Pop(&sh).(int)
+		if sl > ss {
+			heap.Push(&sh, sl - ss)
+		}
+	}
+
+	if len(sh) ==  1 {
+		return heap.Pop(&sh).(int)
+	}
+	return 0
+}
+
+/**
+236. Lowest Common Ancestor of a Binary Tree
+ */
+func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+	lcaa, lcab = p, q
+	lcar = nil
+	lca(root)
+	return lcar
+}
+
+var lcaa, lcab, lcar * TreeNode
+func lca(cr *TreeNode) int {
+	if cr == nil  || lcar != nil {
+		return 0
+	}
+
+
+	l, r := lca(cr.Left), lca(cr.Right)
+	if l == 2  || r == 2{
+		return 0
+	}
+
+	res := l + r
+	if cr == lcaa || cr == lcab { res++ }
+
+
+	if res == 2 {
+		lcar = cr
+	}
+
+	return res
 }
