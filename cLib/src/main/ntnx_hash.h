@@ -8,11 +8,9 @@
 #define DIGEST_BUF_SIZE             33
 
 #define ERR_NO_MEM 1
-
 #define ERR_DEV_GET_VER 1001
 #define ERR_UNSPORTED_VER 1002
 #define ERR_COMP_ERR 1003
-
 #define ERR_MUTEX_ERR 1004
 
 typedef struct ntnx_hash {

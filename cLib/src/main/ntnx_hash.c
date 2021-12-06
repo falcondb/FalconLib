@@ -1,11 +1,10 @@
-#include "ntnx_hash.h"
-
 #include <stdlib.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <string.h>
+#include "ntnx_hash.h"
 
 ntnx_hash_t *ntnx_hash_setup(void) {
   ntnx_hash_t *ntnx;
@@ -50,7 +49,7 @@ char *ntnx_hash_compute(ntnx_hash_t *ctx, void *buf, size_t len) {
     errno = ERR_UNSPORTED_VER;
     return NULL;
   }
-
+  // this piece of memory will be returned to the caller with the digest
   comp.hash = malloc(sizeof(char) * DIGEST_BUF_SIZE);
   if (unlikely(comp.hash == NULL)) {
     errno = ERR_DEV_GET_VER;
