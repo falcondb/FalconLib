@@ -1571,3 +1571,178 @@ func validWordAbbreviation(word string, abbr string) bool {
 
 	return validWordAbbreviation(word[wb-1 + l:], abbr[i:])
 }
+
+/**
+366. Find Leaves of Binary Tree
+ */
+var res366 [][]int
+func findLeaves(root *TreeNode) [][]int {
+	res366 = make([][]int, 1)
+
+	findLeavesHelper(root)
+
+	return res366
+}
+
+func findLeavesHelper(r *TreeNode) int {
+	if r == nil {
+		return -1
+	}
+
+	ld := findLeavesHelper(r.Left)
+	rd := findLeavesHelper(r.Right)
+
+	if ld < rd { ld = rd }
+	ld++
+
+	if len(res366) <= ld {
+		for i:= len(res366)-1; i < ld; i++ {res366 = append(res366, nil)}
+	}
+
+	res366[ld] = append(res366[ld], r.Val)
+
+	return ld
+}
+
+/**
+28. Implement strStr()
+ */
+
+func strStr(haystack string, needle string) int {
+	if len(haystack) < len(needle) {
+		return -1
+	}
+
+
+	for i := 0; i < len(haystack) -  len(needle) + 1; i++ {
+		j := 0
+		for ; j < len(needle) && haystack[i+j] == needle[j]; j++ {		}
+		if j == len(needle) {
+			return i
+		}
+	}
+
+	return -1
+}
+
+
+/**
+14. Longest Common Prefix
+ */
+
+func longestCommonPrefix(strs []string) string {
+	if len(strs) == 0 { return "" }
+
+	res := make([]byte, 0)
+
+	ml := 1<<7
+
+	for _, s := range strs {
+		if len(s) < ml {ml = len(s)}
+	}
+
+	for si := 0; si < ml; si++ {
+		cc := strs[0][si]
+		for j := 0; j < len(strs); j++ {
+			if strs[j][si] != cc {
+				return string(res)
+			}
+		}
+		res = append(res, cc)
+	}
+
+	return string(res)
+}
+
+/**
+169. Majority Element
+ */
+
+func majorityElement2(nums []int) int {
+	c, cc := 0, 0
+
+	for _, n := range nums {
+		if n == c {cc++} else {
+			cc--
+			if cc <0 {
+				c = n
+				cc = 0
+			}
+		}
+
+	}
+
+	return c
+}
+
+/**
+190. Reverse Bits
+ */
+
+func reverseBits(num uint32) uint32 {
+	res := uint32(0)
+
+	for i := 32; i > 0; i-- {
+		res = res << 1
+		if num & 0x1 == 1 {
+			res++
+		}
+		num = num >> 1
+	}
+
+	return res
+}
+
+
+/**
+404. Sum of Left Leaves
+ */
+
+func sumOfLeftLeaves(root *TreeNode) int {
+	if root == nil { return 0 }
+
+	res := 0
+	cands := []*TreeNode{root}
+
+	for len(cands) != 0 {
+		ncs := make([]*TreeNode , 0)
+		for _, n := range cands {
+			if n.Left != nil && n.Left.Left == nil && n.Left.Right == nil {
+				res += n.Left.Val
+			}
+			if n.Left != nil {
+				ncs = append(ncs, n.Left)
+			}
+			if n.Right != nil {
+				ncs = append(ncs, n.Right)
+			}
+
+		}
+		cands = ncs
+	}
+
+	return res
+}
+
+/**
+509. Fibonacci Number
+ */
+
+func fib(n int) int {
+	if n == 0 {
+		return 0
+	}
+	if n == 1 {
+		return 1
+	}
+
+	n -= 1
+	a, b := 0, 1
+
+	for n > 0 {
+		a = a + b
+		b, a = a, b
+	}
+
+	return a
+}

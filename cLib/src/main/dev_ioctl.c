@@ -4,10 +4,10 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <string.h>
-#include "ntnx_hash.h"
+#include "dev_ioctl.h"
 
-ntnx_hash_t *ntnx_hash_setup(void) {
-  ntnx_hash_t *ntnx;
+dev_ioctl_t *dev_ioctl_setup(void) {
+  dev_ioctl_t *ntnx;
   ntnx = malloc(sizeof(*ntnx));
   if (unlikely(ntnx == NULL)) {
     errno = ERR_NO_MEM;
@@ -34,10 +34,10 @@ err_return:
   return NULL;
 }
 
-char *ntnx_hash_compute(ntnx_hash_t *ctx, void *buf, size_t len) {
+char *dev_ioctl_compute(dev_ioctl_t *ctx, void *buf, size_t len) {
   unsigned int api_ver;
   int ret;
-  struct ntnx_hash_compute comp;
+  struct dev_ioctl_compute comp;
 
   ret = ioctl(ctx->dev_fd, NTNX_HASH_GET_API_VERSION, &api_ver);
   if (unlikely(ret < 0)) {
@@ -76,7 +76,7 @@ char *ntnx_hash_compute(ntnx_hash_t *ctx, void *buf, size_t len) {
   return (char *)comp.hash;
 }
 
-int ntnx_hash_destroy(ntnx_hash_t *ctx) {
+int dev_ioctl_destroy(dev_ioctl_t *ctx) {
   int ret;
 
   pthread_mutex_destroy(&ctx->mutex);
